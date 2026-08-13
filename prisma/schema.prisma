@@ -15,6 +15,90 @@ model Country {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  passportRules    VisaRule[] @relation("PassportCountry")
+  destinationRules VisaRule[] @relation("DestinationCountry")
+
   @@index([active])
   @@index([name])
+}
+
+model TravelPurpose {
+  id          String   @id @default(cuid())
+  code        String   @unique
+  name        String
+  slug        String   @unique
+  description String?
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  visaRules VisaRule[]
+
+  @@index([active])
+  @@index([name])
+}
+
+model VisaType {
+  id          String   @id @default(cuid())
+  code        String   @unique
+  name        String
+  description String?
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  visaRules VisaRule[]
+
+  @@index([active])
+  @@index([name])
+}
+
+enum VisaRequirement {
+  VISA_FREE
+  VISA_REQUIRED
+  VISA_ON_ARRIVAL
+  EVISA_REQUIRED
+  ETA_REQUIRED
+  ENTRY_NOT_PERMITTED
+  SPECIAL_PERMISSION
+}
+
+model VisaRule {
+  id String @id @default(cuid())
+
+  passportCountryId    String
+  destinationCountryId String
+  purposeId            String
+  visaTypeId           String?
+
+  requirement VisaRequirement
+
+  maxStayDays      Int?
+  multipleEntry    Boolean @default(false)
+  ordinaryPassport Boolean @default(true)
+
+  effectiveFrom  DateTime?
+  effectiveUntil DateTime?
+
+  priority Int     @default(0)
+  active   Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  passportCountry    Country       @relation("PassportCountry", fields: [passportCountryId], references: [id], onDelete: Restrict)
+  destinationCountry Country       @relation("DestinationCountry", fields: [destinationCountryId], references: [id], onDelete: Restrict)
+  purpose            TravelPurpose @relation(fields: [purposeId], references: [id], onDelete: Restrict)
+  visaType           VisaType?     @relation(fields: [visaTypeId], references: [id], onDelete: Restrict)
+
+  @@index([passportCountryId])
+  @@index([destinationCountryId])
+  @@index([purposeId])
+  @@index([visaTypeId])
+  @@index([requirement])
+  @@index([active])
+  @@index([priority])
+  @@index([effectiveFrom])
+  @@index([effectiveUntil])
+  @@index([passportCountryId, destinationCountryId, purposeId, active])
 }
