@@ -75,6 +75,12 @@ export async function POST(request: Request) {
         ordinaryPassport: rule.ordinaryPassport,
         effectiveFrom: rule.effectiveFrom,
         effectiveUntil: rule.effectiveUntil,
+        source: {
+          name: rule.sourceName,
+          url: rule.sourceUrl,
+          lastVerifiedAt: rule.lastVerifiedAt,
+          notes: rule.notes,
+        },
       },
     });
   } catch (error) {

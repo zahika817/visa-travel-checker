@@ -81,7 +81,7 @@ export async function findVisaRule({
       ],
     },
 
-    include: {
+    select: {
       passportCountry: {
         select: {
           code: true,
@@ -109,6 +109,18 @@ export async function findVisaRule({
           name: true,
         },
       },
+
+      sourceName: true,
+      sourceUrl: true,
+      lastVerifiedAt: true,
+      notes: true,
+
+      requirement: true,
+      maxStayDays: true,
+      multipleEntry: true,
+      ordinaryPassport: true,
+      effectiveFrom: true,
+      effectiveUntil: true,
     },
 
     orderBy: [

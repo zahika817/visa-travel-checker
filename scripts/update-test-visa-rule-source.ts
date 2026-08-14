@@ -1,6 +1,6 @@
 import "dotenv/config";
 import { PrismaPg } from "@prisma/adapter-pg";
-import { PrismaClient, VisaRequirement } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 
 const connectionString = process.env.DATABASE_URL;
 
@@ -24,50 +24,47 @@ async function main() {
     where: { code: "TOURISM" },
   });
 
-  const visaType = await prisma.visaType.findUnique({
-    where: { code: "TOURIST" },
-  });
-
-  if (!passport || !destination || !purpose || !visaType) {
+  if (!passport || !destination || !purpose) {
     throw new Error("Required reference data is missing");
   }
 
-  const existingRule = await prisma.visaRule.findFirst({
+  const rule = await prisma.visaRule.findFirst({
     where: {
       passportCountryId: passport.id,
       destinationCountryId: destination.id,
       purposeId: purpose.id,
       active: true,
     },
-  });
-
-  if (existingRule) {
-    console.log("Test rule already exists:", existingRule.id);
-    return;
-  }
-
-  const rule = await prisma.visaRule.create({
-    data: {
-      passportCountryId: passport.id,
-      destinationCountryId: destination.id,
-      purposeId: purpose.id,
-      visaTypeId: visaType.id,
-      requirement: VisaRequirement.VISA_REQUIRED,
-      maxStayDays: 90,
-      multipleEntry: false,
-      ordinaryPassport: true,
-      effectiveFrom: new Date("2026-01-01T00:00:00.000Z"),
-      priority: 100,
-      active: true,
-      sourceName: "Test Source",
-      sourceUrl: null,
-      lastVerifiedAt: new Date(),
-      notes: "Development test rule. Replace with verified official source data before production use.",
+    orderBy: {
+      priority: "desc",
     },
   });
 
-  console.log("TEST RULE CREATED:");
-  console.log(rule);
+  if (!rule) {
+    throw new Error("Test visa rule not found");
+  }
+
+  const updated = await prisma.visaRule.update({
+    where: {
+      id: rule.id,
+    },
+    data: {
+      sourceName: "Development Test Source",
+      sourceUrl: null,
+      lastVerifiedAt: new Date(),
+      notes:
+        "Development test rule. Replace with verified official source data before production use.",
+    },
+  });
+
+  console.log("UPDATED VISA RULE SOURCE:");
+  console.log({
+    id: updated.id,
+    sourceName: updated.sourceName,
+    sourceUrl: updated.sourceUrl,
+    lastVerifiedAt: updated.lastVerifiedAt,
+    notes: updated.notes,
+  });
 }
 
 main()
