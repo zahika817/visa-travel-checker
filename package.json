@@ -6,7 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "create:admin": "tsx scripts/create-admin.ts",
+    "seed:visa": "tsx scripts/seed-visa-rules.ts",
+    "test:visa": "tsx scripts/test-visa-rule.ts",
+    "update:visa-source": "tsx scripts/update-test-visa-rule-source.ts"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.9.1",
