@@ -32,9 +32,12 @@ export async function generateMetadata({ params }: PageProps) {
     return {};
   }
 
+  const passportName = countries.passport.replace(/-/g, " ");
+  const destinationName = countries.destination.replace(/-/g, " ");
+
   return {
-    title: `${countries.passport} to ${countries.destination} Visa Requirements`,
-    description: `Check visa requirements for ${countries.passport} passport holders travelling to ${countries.destination}.`,
+    title: `${passportName} to ${destinationName} Visa Requirements (2026)`,
+    description: `Check ${destinationName} visa requirements for ${passportName} passport holders. Find visa type, stay duration, and latest travel information.`,
   };
 }
 
