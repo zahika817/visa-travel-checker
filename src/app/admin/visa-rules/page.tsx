@@ -167,6 +167,10 @@ export default function VisaRulesPage() {
         </select>
 
 
+        <div className="mt-6 text-sm text-zinc-600">
+          Showing {filteredRules.length} of {rules.length} visa rules
+        </div>
+
         <div className="mt-8 overflow-hidden rounded-2xl border">
 
           <table className="w-full text-left text-sm">
