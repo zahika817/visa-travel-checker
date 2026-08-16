@@ -34,6 +34,7 @@ export default function VisaCheckerPage() {
 
   const [result, setResult] = useState<Result | null>(null);
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     async function load() {
@@ -50,25 +51,32 @@ export default function VisaCheckerPage() {
   async function checkVisa() {
     setMessage("");
     setResult(null);
+    setLoading(true);
 
-    const response = await fetch("/api/visa-check", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        passportCode,
-        destinationCode,
-        purposeCode,
-      }),
-    });
+    try {
+      const response = await fetch("/api/visa-check", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          passportCode,
+          destinationCode,
+          purposeCode,
+        }),
+      });
 
-    const data = await response.json();
+      const data = await response.json();
 
-    if (data.success) {
-      setResult(data.result);
-    } else {
-      setMessage(data.error);
+      if (data.success) {
+        setResult(data.result);
+      } else {
+        setMessage(data.error);
+      }
+    } catch {
+      setMessage("Unable to check visa requirements. Please try again.");
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -136,9 +144,10 @@ export default function VisaCheckerPage() {
 
           <button
             onClick={checkVisa}
-            className="rounded-xl bg-black px-8 py-3 text-white"
+            disabled={loading}
+            className="rounded-xl bg-black px-8 py-3 text-white disabled:opacity-50"
           >
-            Check Visa
+            {loading ? "Checking..." : "Check Visa"}
           </button>
 
         </div>
