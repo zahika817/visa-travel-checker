@@ -53,7 +53,7 @@ export default async function VisaRoutePage({
     notFound();
   }
 
-  const [passport, destination] = await Promise.all([
+  const [passport, destination, travelPurpose] = await Promise.all([
     prisma.country.findUnique({
       where: {
         slug: countries.passport,
@@ -65,9 +65,15 @@ export default async function VisaRoutePage({
         slug: countries.destination,
       },
     }),
+
+    prisma.travelPurpose.findUnique({
+      where: {
+        code: purpose.toUpperCase(),
+      },
+    }),
   ]);
 
-  if (!passport || !destination) {
+  if (!passport || !destination || !travelPurpose) {
     notFound();
   }
 
@@ -80,6 +86,21 @@ export default async function VisaRoutePage({
   if (!rule) {
     notFound();
   }
+
+  const relatedRules = await prisma.visaRule.findMany({
+    where: {
+      passportCountryId: passport.id,
+      purposeId: travelPurpose.id,
+      active: true,
+      NOT: {
+        destinationCountryId: destination.id,
+      },
+    },
+    include: {
+      destinationCountry: true,
+    },
+    take: 5,
+  });
 
   return (
     <main className="min-h-screen bg-zinc-50 p-8 text-zinc-900">
@@ -162,6 +183,32 @@ export default async function VisaRoutePage({
           </div>
 
         </div>
+
+
+        {relatedRules.length > 0 && (
+          <div className="mt-8 rounded-3xl border bg-white p-8">
+
+            <h2 className="text-2xl font-bold">
+              Related Visa Routes
+            </h2>
+
+            <div className="mt-5 space-y-3">
+
+              {relatedRules.map((item) => (
+                <a
+                  key={item.id}
+                  href={`/visa/${passport.slug}-to-${item.destinationCountry.slug}/${purpose.toLowerCase()}`}
+                  className="block rounded-xl border p-4 hover:bg-zinc-50"
+                >
+                  {passport.name} to{" "}
+                  {item.destinationCountry.name} Visa Requirements
+                </a>
+              ))}
+
+            </div>
+
+          </div>
+        )}
 
 
         <Script
