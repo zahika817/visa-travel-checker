@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import Script from "next/script";
 
 import { findVisaRule, isVisaRequired } from "@/lib/visa/rules";
 import { prisma } from "@/lib/db";
@@ -124,6 +125,67 @@ export default async function VisaRoutePage({
           </div>
 
         </div>
+
+
+        <div className="mt-8 rounded-3xl border bg-white p-8">
+
+          <h2 className="text-2xl font-bold">
+            Frequently Asked Questions
+          </h2>
+
+          <div className="mt-6 space-y-5">
+
+            <div>
+              <h3 className="font-semibold">
+                Do {rule.passportCountry.name} citizens need a visa for {rule.destinationCountry.name}?
+              </h3>
+              <p className="mt-2 text-zinc-600">
+                {isVisaRequired(rule.requirement)
+                  ? `Yes, travelers from ${rule.passportCountry.name} require a visa for this travel purpose.`
+                  : `No visa is generally required for this travel purpose.`}
+              </p>
+            </div>
+
+            <div>
+              <h3 className="font-semibold">
+                How long can travelers stay?
+              </h3>
+              <p className="mt-2 text-zinc-600">
+                Maximum stay:
+                {" "}
+                {rule.maxStayDays
+                  ? `${rule.maxStayDays} days`
+                  : "Not specified"}
+              </p>
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <Script
+          id="faq-schema"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              mainEntity: [
+                {
+                  "@type": "Question",
+                  name: `Do ${rule.passportCountry.name} citizens need a visa for ${rule.destinationCountry.name}?`,
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: isVisaRequired(rule.requirement)
+                      ? "A visa is required for this travel purpose."
+                      : "A visa is not required for this travel purpose.",
+                  },
+                },
+              ],
+            }),
+          }}
+        />
 
       </div>
     </main>
