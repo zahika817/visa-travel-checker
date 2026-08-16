@@ -2,14 +2,15 @@
 
 import { useState } from "react";
 
-type ImportResult = {
-  count: number;
-  rows: Record<string, string>[];
+type ImportReport = {
+  created: number;
+  skipped: number;
+  errors: string[];
 };
 
 export default function ImportVisaRulesPage() {
   const [file, setFile] = useState<File | null>(null);
-  const [result, setResult] = useState<ImportResult | null>(null);
+  const [report, setReport] = useState<ImportReport | null>(null);
   const [message, setMessage] = useState("");
 
   async function uploadCSV() {
@@ -32,11 +33,8 @@ export default function ImportVisaRulesPage() {
     const data = await response.json();
 
     if (data.success) {
-      setResult({
-        count: data.count,
-        rows: data.rows.slice(0, 5),
-      });
-      setMessage("CSV processed successfully.");
+      setReport(data.report);
+      setMessage("CSV import completed successfully.");
     } else {
       setMessage(data.error);
     }
@@ -51,7 +49,7 @@ export default function ImportVisaRulesPage() {
         </h1>
 
         <p className="mt-2 text-zinc-600">
-          Upload a CSV file to preview visa rules.
+          Upload CSV and import visa rules into database.
         </p>
 
         <div className="mt-8 rounded-2xl border bg-white p-6 shadow-sm">
@@ -69,7 +67,7 @@ export default function ImportVisaRulesPage() {
             onClick={uploadCSV}
             className="mt-5 rounded-xl bg-black px-6 py-3 text-white"
           >
-            Upload CSV
+            Import CSV
           </button>
 
           {message && (
@@ -80,20 +78,32 @@ export default function ImportVisaRulesPage() {
 
         </div>
 
-        {result && (
+        {report && (
           <div className="mt-6 rounded-2xl border bg-white p-6">
 
             <h2 className="text-xl font-bold">
-              Import Preview
+              Import Report
             </h2>
 
-            <p className="mt-2">
-              Total rows: {result.count}
-            </p>
+            <div className="mt-4 space-y-2 text-sm">
+              <p>
+                Created: {report.created}
+              </p>
 
-            <pre className="mt-4 overflow-auto rounded-xl bg-zinc-100 p-4 text-sm">
-              {JSON.stringify(result.rows, null, 2)}
-            </pre>
+              <p>
+                Skipped: {report.skipped}
+              </p>
+
+              <p>
+                Errors: {report.errors.length}
+              </p>
+            </div>
+
+            {report.errors.length > 0 && (
+              <pre className="mt-4 overflow-auto rounded-xl bg-zinc-100 p-4 text-sm">
+                {JSON.stringify(report.errors, null, 2)}
+              </pre>
+            )}
 
           </div>
         )}
