@@ -1,0 +1,245 @@
+"use client";
+
+import { useEffect, useState } from "react";
+
+type Option = {
+  code: string;
+  name: string;
+};
+
+type Result = {
+  passport: { name: string };
+  destination: { name: string };
+  purpose: { name: string };
+  requirement: string;
+  visaRequired: boolean;
+  visaType: { name: string } | null;
+  maxStayDays: number | null;
+  multipleEntry: boolean;
+  source: {
+    name: string | null;
+    url: string | null;
+    notes: string | null;
+    lastVerifiedAt: string | null;
+  };
+};
+
+export default function VisaCheckerPage() {
+  const [countries, setCountries] = useState<Option[]>([]);
+  const [purposes, setPurposes] = useState<Option[]>([]);
+
+  const [passportCode, setPassportCode] = useState("PK");
+  const [destinationCode, setDestinationCode] = useState("FR");
+  const [purposeCode, setPurposeCode] = useState("TOURISM");
+
+  const [result, setResult] = useState<Result | null>(null);
+  const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    async function load() {
+      const response = await fetch("/api/reference-data");
+      const data = await response.json();
+
+      setCountries(data.countries ?? []);
+      setPurposes(data.purposes ?? []);
+    }
+
+    load();
+  }, []);
+
+  async function checkVisa() {
+    setMessage("");
+    setResult(null);
+
+    const response = await fetch("/api/visa-check", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        passportCode,
+        destinationCode,
+        purposeCode,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (data.success) {
+      setResult(data.result);
+    } else {
+      setMessage(data.error);
+    }
+  }
+
+  return (
+    <main className="min-h-screen bg-zinc-50 p-8 text-zinc-900">
+      <div className="mx-auto max-w-4xl">
+
+        <h1 className="text-4xl font-bold">
+          Visa Requirement Checker
+        </h1>
+
+        <p className="mt-2 text-zinc-600">
+          Check visa requirements from verified travel information.
+        </p>
+
+        <div className="mt-8 rounded-3xl border bg-white p-6 shadow-sm space-y-4">
+
+          {[
+            {
+              value: passportCode,
+              setter: setPassportCode,
+            },
+            {
+              value: destinationCode,
+              setter: setDestinationCode,
+            },
+          ].map((item, index) => (
+            <select
+              key={index}
+              value={item.value}
+              onChange={(e) => item.setter(e.target.value)}
+              className="w-full rounded-xl border p-3"
+            >
+              {countries.map((c) => (
+                <option key={c.code} value={c.code}>
+                  {c.name}
+                </option>
+              ))}
+            </select>
+          ))}
+
+          <select
+            value={purposeCode}
+            onChange={(e) => setPurposeCode(e.target.value)}
+            className="w-full rounded-xl border p-3"
+          >
+            {purposes.map((p) => (
+              <option key={p.code} value={p.code}>
+                {p.name}
+              </option>
+            ))}
+          </select>
+
+
+          <button
+            onClick={checkVisa}
+            className="rounded-xl bg-black px-8 py-3 text-white"
+          >
+            Check Visa
+          </button>
+
+        </div>
+
+
+        {message && (
+          <div className="mt-6 rounded-xl border border-red-300 bg-red-50 p-4 text-red-700">
+            {message}
+          </div>
+        )}
+
+
+        {result && (
+          <div className="mt-8 rounded-3xl border bg-white p-8 shadow-sm">
+
+            <div className="flex items-center justify-between">
+
+              <h2 className="text-2xl font-bold">
+                Visa Result
+              </h2>
+
+              <span className={
+                result.visaRequired
+                ? "rounded-full bg-red-100 px-4 py-2 text-red-700"
+                : "rounded-full bg-green-100 px-4 py-2 text-green-700"
+              }>
+                {result.visaRequired ? "Visa Required" : "Visa Free"}
+              </span>
+
+            </div>
+
+
+            <p className="mt-6 text-xl font-semibold">
+              {result.passport.name} → {result.destination.name}
+            </p>
+
+
+            <div className="mt-6 grid gap-4 md:grid-cols-2">
+
+              <div className="rounded-xl bg-zinc-50 p-4">
+                <b>Purpose</b>
+                <p>{result.purpose.name}</p>
+              </div>
+
+
+              <div className="rounded-xl bg-zinc-50 p-4">
+                <b>Visa Type</b>
+                <p>{result.visaType?.name ?? "-"}</p>
+              </div>
+
+
+              <div className="rounded-xl bg-zinc-50 p-4">
+                <b>Maximum Stay</b>
+                <p>
+                  {result.maxStayDays
+                    ? `${result.maxStayDays} days`
+                    : "Not specified"}
+                </p>
+              </div>
+
+
+              <div className="rounded-xl bg-zinc-50 p-4">
+                <b>Multiple Entry</b>
+                <p>{result.multipleEntry ? "Yes" : "No"}</p>
+              </div>
+
+            </div>
+
+
+            <div className="mt-6 rounded-xl border p-5">
+
+              <h3 className="font-bold">
+                Verified Source
+              </h3>
+
+              <p className="mt-2">
+                {result.source.name ?? "-"}
+              </p>
+
+
+              {result.source.lastVerifiedAt && (
+                <p className="text-sm text-zinc-500">
+                  Verified:
+                  {" "}
+                  {new Date(result.source.lastVerifiedAt).toLocaleDateString()}
+                </p>
+              )}
+
+
+              {result.source.notes && (
+                <p className="mt-3 text-sm">
+                  {result.source.notes}
+                </p>
+              )}
+
+
+              {result.source.url && (
+                <a
+                  href={result.source.url}
+                  target="_blank"
+                  className="mt-3 inline-block text-blue-600 underline"
+                >
+                  Visit Official Source
+                </a>
+              )}
+
+            </div>
+
+          </div>
+        )}
+
+      </div>
+    </main>
+  );
+}

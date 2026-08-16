@@ -68,9 +68,9 @@ export default function EditVisaRulePage({
         },
         body: JSON.stringify({
           requirement: form.get("requirement"),
-          maxStayDays: Number(
-            form.get("maxStayDays"),
-          ),
+          maxStayDays: form.get("maxStayDays")
+            ? Number(form.get("maxStayDays"))
+            : null,
           sourceName: form.get("sourceName"),
           sourceUrl: form.get("sourceUrl"),
           notes: form.get("notes"),
@@ -128,22 +128,20 @@ export default function EditVisaRulePage({
             defaultValue={rule.requirement}
             className="w-full rounded-xl border p-3"
           >
-            <option value="VISA_REQUIRED">
-              Visa Required
-            </option>
-
-            <option value="VISA_FREE">
-              Visa Free
-            </option>
-
-            <option value="EVISA_REQUIRED">
-              eVisa Required
-            </option>
+            <option value="VISA_FREE">Visa Free</option>
+            <option value="VISA_REQUIRED">Visa Required</option>
+            <option value="VISA_ON_ARRIVAL">Visa On Arrival</option>
+            <option value="EVISA_REQUIRED">eVisa Required</option>
+            <option value="ETA_REQUIRED">ETA Required</option>
+            <option value="ENTRY_NOT_PERMITTED">Entry Not Permitted</option>
+            <option value="SPECIAL_PERMISSION">Special Permission</option>
           </select>
 
 
           <input
             name="maxStayDays"
+            type="number"
+            min="0"
             defaultValue={rule.maxStayDays ?? ""}
             className="w-full rounded-xl border p-3"
           />

@@ -75,6 +75,46 @@ export async function POST(request: Request) {
       );
     }
 
+    const validRequirements = [
+      "VISA_FREE",
+      "VISA_REQUIRED",
+      "VISA_ON_ARRIVAL",
+      "EVISA_REQUIRED",
+      "ETA_REQUIRED",
+      "ENTRY_NOT_PERMITTED",
+      "SPECIAL_PERMISSION",
+    ];
+
+    if (!validRequirements.includes(requirement)) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Invalid visa requirement.",
+        },
+        { status: 400 },
+      );
+    }
+
+    const parsedMaxStayDays =
+      maxStayDays === undefined ||
+      maxStayDays === null ||
+      maxStayDays === ""
+        ? null
+        : Number(maxStayDays);
+
+    if (
+      parsedMaxStayDays !== null &&
+      (!Number.isInteger(parsedMaxStayDays) || parsedMaxStayDays < 0)
+    ) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Maximum stay days must be a non-negative whole number.",
+        },
+        { status: 400 },
+      );
+    }
+
     const rule = await prisma.visaRule.create({
       data: {
         passportCountryId: passport.id,
@@ -82,7 +122,7 @@ export async function POST(request: Request) {
         purposeId: purpose.id,
         visaTypeId: visaType?.id ?? null,
         requirement,
-        maxStayDays: maxStayDays ?? null,
+        maxStayDays: parsedMaxStayDays,
         multipleEntry: multipleEntry ?? false,
         ordinaryPassport: ordinaryPassport ?? true,
         sourceName: sourceName ?? null,

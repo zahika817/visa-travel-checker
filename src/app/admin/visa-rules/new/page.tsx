@@ -44,7 +44,9 @@ export default function NewVisaRulePage() {
       purposeCode: form.get("purposeCode"),
       visaTypeCode: form.get("visaTypeCode"),
       requirement: form.get("requirement"),
-      maxStayDays: Number(form.get("maxStayDays")),
+      maxStayDays: form.get("maxStayDays")
+        ? Number(form.get("maxStayDays"))
+        : null,
       multipleEntry: form.get("multipleEntry") === "on",
       sourceName: form.get("sourceName"),
       sourceUrl: form.get("sourceUrl"),
@@ -66,6 +68,10 @@ export default function NewVisaRulePage() {
         ? "Visa rule created successfully."
         : data.error,
     );
+
+    if (data.success) {
+      event.currentTarget.reset();
+    }
   }
 
   return (
@@ -79,6 +85,8 @@ export default function NewVisaRulePage() {
           onSubmit={submit}
           className="mt-8 space-y-5 rounded-2xl border border-zinc-200 bg-white p-6 text-zinc-900 shadow-sm"
         >
+          <div>
+            <label className="mb-2 block text-sm font-semibold">Passport Country</label>
           <select name="passportCode" className="w-full rounded-xl border border-zinc-300 bg-white p-3 text-sm text-zinc-900">
             {countries.map((c) => (
               <option key={c.code} value={c.code}>
@@ -86,7 +94,10 @@ export default function NewVisaRulePage() {
               </option>
             ))}
           </select>
+          </div>
 
+          <div>
+            <label className="mb-2 block text-sm font-semibold">Destination Country</label>
           <select name="destinationCode" className="w-full rounded-xl border border-zinc-300 bg-white p-3 text-sm text-zinc-900">
             {countries.map((c) => (
               <option key={c.code} value={c.code}>
@@ -94,7 +105,10 @@ export default function NewVisaRulePage() {
               </option>
             ))}
           </select>
+          </div>
 
+          <div>
+            <label className="mb-2 block text-sm font-semibold">Travel Purpose</label>
           <select name="purposeCode" className="w-full rounded-xl border border-zinc-300 bg-white p-3 text-sm text-zinc-900">
             {purposes.map((p) => (
               <option key={p.code} value={p.code}>
@@ -102,7 +116,10 @@ export default function NewVisaRulePage() {
               </option>
             ))}
           </select>
+          </div>
 
+          <div>
+            <label className="mb-2 block text-sm font-semibold">Visa Type</label>
           <select name="visaTypeCode" className="w-full rounded-xl border border-zinc-300 bg-white p-3 text-sm text-zinc-900">
             {visaTypes.map((v) => (
               <option key={v.code} value={v.code}>
@@ -110,37 +127,55 @@ export default function NewVisaRulePage() {
               </option>
             ))}
           </select>
+          </div>
 
+          <div>
+            <label className="mb-2 block text-sm font-semibold">Visa Requirement</label>
           <select name="requirement" className="w-full rounded-xl border border-zinc-300 bg-white p-3 text-sm text-zinc-900">
             <option value="VISA_REQUIRED">Visa Required</option>
             <option value="VISA_FREE">Visa Free</option>
             <option value="EVISA_REQUIRED">eVisa Required</option>
             <option value="VISA_ON_ARRIVAL">Visa On Arrival</option>
           </select>
+          </div>
 
+          <div>
+            <label className="mb-2 block text-sm font-semibold">Maximum Stay Days</label>
           <input
             name="maxStayDays"
+            type="number"
+            min="0"
             placeholder="Maximum stay days"
             className="w-full rounded-xl border border-zinc-300 bg-white p-3 text-sm text-zinc-900"
           />
+          </div>
 
+          <div>
+            <label className="mb-2 block text-sm font-semibold">Source Name</label>
           <input
             name="sourceName"
             placeholder="Source name"
             className="w-full rounded-xl border border-zinc-300 bg-white p-3 text-sm text-zinc-900"
           />
+          </div>
 
+          <div>
+            <label className="mb-2 block text-sm font-semibold">Source URL</label>
           <input
             name="sourceUrl"
             placeholder="Source URL"
             className="w-full rounded-xl border border-zinc-300 bg-white p-3 text-sm text-zinc-900"
           />
+          </div>
 
+          <div>
+            <label className="mb-2 block text-sm font-semibold">Notes</label>
           <textarea
             name="notes"
             placeholder="Notes"
             className="w-full rounded-xl border border-zinc-300 bg-white p-3 text-sm text-zinc-900"
           />
+          </div>
 
           <label className="flex gap-2">
             <input type="checkbox" name="multipleEntry" />

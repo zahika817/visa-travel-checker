@@ -85,24 +85,26 @@ export async function PATCH(
 
     const body = await request.json();
 
+    const updateData = Object.fromEntries(
+      Object.entries({
+        requirement: body.requirement,
+        maxStayDays: body.maxStayDays,
+        multipleEntry: body.multipleEntry,
+        ordinaryPassport: body.ordinaryPassport,
+        sourceName: body.sourceName,
+        sourceUrl: body.sourceUrl,
+        notes: body.notes,
+        active: body.active,
+      }).filter(([, value]) => value !== undefined),
+    );
+
     const updatedRule = await prisma.visaRule.update({
       where: {
         id,
       },
       data: {
-        requirement: body.requirement,
-        maxStayDays: body.maxStayDays ?? null,
-        multipleEntry: body.multipleEntry ?? false,
-        ordinaryPassport: body.ordinaryPassport ?? true,
-
-        sourceName: body.sourceName ?? null,
-        sourceUrl: body.sourceUrl ?? null,
-
+        ...updateData,
         lastVerifiedAt: new Date(),
-
-        notes: body.notes ?? null,
-
-        active: body.active ?? true,
       },
     });
 

@@ -30,22 +30,42 @@ type VisaRule = {
 export default function VisaRulesPage() {
   const [rules, setRules] = useState<VisaRule[]>([]);
   const [status, setStatus] = useState("active");
+  const [search, setSearch] = useState("");
+  const [passportFilter, setPassportFilter] = useState("");
+  const [destinationFilter, setDestinationFilter] = useState("");
+  const [purposeFilter, setPurposeFilter] = useState("");
 
 
   useEffect(() => {
     const controller = new AbortController();
 
     async function fetchRules() {
-      const response = await fetch(
-        `/api/admin/visa-rules?status=${status}`,
-        {
-          signal: controller.signal,
-        },
-      );
+      try {
+        const response = await fetch(
+          `/api/admin/visa-rules?status=${status}`,
+          {
+            signal: controller.signal,
+          },
+        );
 
-      const data = await response.json();
+        if (!response.ok) {
+          throw new Error(`Failed to load visa rules: ${response.status}`);
+        }
 
-      setRules(data.rules ?? []);
+        const data = await response.json();
+
+        if (!controller.signal.aborted) {
+          setRules(data.rules ?? []);
+        }
+      } catch (error) {
+        if (error instanceof DOMException && error.name === "AbortError") {
+          return;
+        }
+
+        if (!controller.signal.aborted) {
+          console.error("Failed to load visa rules:", error);
+        }
+      }
     }
 
     fetchRules();
@@ -54,6 +74,30 @@ export default function VisaRulesPage() {
       controller.abort();
     };
   }, [status]);
+
+  const filteredRules = rules.filter((rule) => {
+    const value = search.toLowerCase();
+
+    const matchesSearch =
+      value === "" ||
+      rule.passportCountry.name.toLowerCase().includes(value) ||
+      rule.destinationCountry.name.toLowerCase().includes(value) ||
+      rule.purpose.name.toLowerCase().includes(value) ||
+      (rule.sourceName ?? "").toLowerCase().includes(value);
+
+    return (
+      matchesSearch &&
+      rule.passportCountry.name.toLowerCase().includes(
+        passportFilter.toLowerCase()
+      ) &&
+      rule.destinationCountry.name.toLowerCase().includes(
+        destinationFilter.toLowerCase()
+      ) &&
+      rule.purpose.name.toLowerCase().includes(
+        purposeFilter.toLowerCase()
+      )
+    );
+  });
 
   return (
     <main className="min-h-screen bg-white p-8 text-zinc-900">
@@ -70,6 +114,38 @@ export default function VisaRulesPage() {
           >
             Create Rule
           </Link>
+        </div>
+
+        <input
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search country, purpose, source..."
+          className="mt-6 w-full max-w-md rounded-xl border p-3"
+        />
+
+        <div className="mt-4 flex flex-wrap gap-3">
+
+          <input
+            value={passportFilter}
+            onChange={(e) => setPassportFilter(e.target.value)}
+            placeholder="Passport country"
+            className="rounded-xl border p-3"
+          />
+
+          <input
+            value={destinationFilter}
+            onChange={(e) => setDestinationFilter(e.target.value)}
+            placeholder="Destination country"
+            className="rounded-xl border p-3"
+          />
+
+          <input
+            value={purposeFilter}
+            onChange={(e) => setPurposeFilter(e.target.value)}
+            placeholder="Purpose"
+            className="rounded-xl border p-3"
+          />
+
         </div>
 
         <select
@@ -108,7 +184,7 @@ export default function VisaRulesPage() {
             </thead>
 
             <tbody>
-              {rules.map((rule) => (
+              {filteredRules.map((rule) => (
                 <tr key={rule.id} className="border-b">
 
                   <td className="p-4">
@@ -136,12 +212,42 @@ export default function VisaRulesPage() {
                   </td>
 
                   <td className="p-4">
-                    <Link
-                      href={`/admin/visa-rules/${rule.id}`}
-                      className="rounded-lg border px-3 py-1"
-                    >
-                      Edit
-                    </Link>
+                    <div className="flex gap-2">
+
+                      <Link
+                        href={`/admin/visa-rules/${rule.id}`}
+                        className="rounded-lg border px-3 py-1"
+                      >
+                        Edit
+                      </Link>
+
+                      <button
+                        onClick={async () => {
+                          await fetch(
+                            `/api/admin/visa-rules/${rule.id}`,
+                            {
+                              method: "PATCH",
+                              headers: {
+                                "Content-Type": "application/json",
+                              },
+                              body: JSON.stringify({
+                                active: !rule.active,
+                              }),
+                            },
+                          );
+
+                          window.location.reload();
+                        }}
+                        className={
+                          rule.active
+                            ? "rounded-lg border border-red-500 px-3 py-1 text-red-600"
+                            : "rounded-lg border border-green-500 px-3 py-1 text-green-600"
+                        }
+                      >
+                        {rule.active ? "Deactivate" : "Activate"}
+                      </button>
+
+                    </div>
                   </td>
 
                 </tr>

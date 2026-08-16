@@ -107,3 +107,26 @@ model VisaRule {
   @@index([effectiveUntil])
   @@index([passportCountryId, destinationCountryId, purposeId, active])
 }
+
+
+enum AdminRole {
+  SUPER_ADMIN
+  ADMIN
+  EDITOR
+}
+
+
+model AdminUser {
+  id           String     @id @default(cuid())
+  name         String
+  email        String     @unique
+  passwordHash String
+
+  role   AdminRole @default(ADMIN)
+  active Boolean   @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([active])
+}
