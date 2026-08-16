@@ -132,6 +132,26 @@ export default async function AdminPage() {
           </div>
 
 
+          <div className="rounded-2xl border bg-white p-6 shadow-sm">
+
+            <h2 className="text-xl font-semibold">
+              Bulk Import Rules
+            </h2>
+
+            <p className="mt-2 text-zinc-600">
+              Import multiple visa rules using CSV files.
+            </p>
+
+            <Link
+              href="/admin/visa-rules/import"
+              className="mt-5 inline-block rounded-xl bg-black px-5 py-3 text-white"
+            >
+              Import Rules
+            </Link>
+
+          </div>
+
+
         </div>
 
       </div>
