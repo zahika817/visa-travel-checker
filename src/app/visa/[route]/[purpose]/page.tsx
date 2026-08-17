@@ -56,6 +56,10 @@ export async function generateMetadata({ params }: PageProps) {
       title,
       description,
     },
+
+    alternates: {
+      canonical: `${process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"}/visa/${countries.passport}-${"to"}-${countries.destination}/${purpose.toLowerCase()}`,
+    },
   };
 }
 
