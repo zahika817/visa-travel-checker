@@ -116,6 +116,24 @@ export default async function VisaRoutePage({
           {rule.purpose.name.toLowerCase()} travel.
         </p>
 
+        <div className="mt-6 rounded-3xl border bg-white p-8">
+
+          <h2 className="text-2xl font-bold">
+            {rule.passportCountry.name} to{" "}
+            {rule.destinationCountry.name} Travel Information
+          </h2>
+
+          <p className="mt-4 text-zinc-600 leading-7">
+            Travelers holding a {rule.passportCountry.name} passport
+            who plan to visit {rule.destinationCountry.name} for{" "}
+            {rule.purpose.name.toLowerCase()} should check the latest
+            visa requirements, permitted stay duration, and official
+            travel information before departure.
+          </p>
+
+        </div>
+
+
         <div className="mt-8 rounded-3xl border bg-white p-8">
 
           <h2 className="text-2xl font-bold">
