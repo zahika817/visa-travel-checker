@@ -70,6 +70,14 @@ export default function ImportVisaRulesPage() {
             Import CSV
           </button>
 
+          <a
+            href="/visa-rules-template.csv"
+            download
+            className="mt-4 inline-block rounded-xl border px-6 py-3"
+          >
+            Download CSV Template
+          </a>
+
           {message && (
             <p className="mt-4 text-sm">
               {message}

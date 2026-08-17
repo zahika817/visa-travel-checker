@@ -1,0 +1,2 @@
+passport,destination,purpose,visaType,requirement,maxStayDays,sourceName,sourceUrl,notes
+PK,FR,TOURISM,TOURIST,VISA_REQUIRED,90,French Embassy,https://example.com,Tourism visa information
