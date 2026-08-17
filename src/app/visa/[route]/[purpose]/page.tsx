@@ -106,6 +106,41 @@ export default async function VisaRoutePage({
     <main className="min-h-screen bg-zinc-50 p-8 text-zinc-900">
       <div className="mx-auto max-w-4xl">
 
+        <nav className="mb-6 text-sm text-zinc-500">
+          Home {" > "} Visa {" > "}
+          {rule.passportCountry.name} to{" "}
+          {rule.destinationCountry.name}
+        </nav>
+
+        <Script
+          id="breadcrumb-schema"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                {
+                  "@type": "ListItem",
+                  position: 1,
+                  name: "Home",
+                  item: "/",
+                },
+                {
+                  "@type": "ListItem",
+                  position: 2,
+                  name: "Visa",
+                },
+                {
+                  "@type": "ListItem",
+                  position: 3,
+                  name: `${rule.passportCountry.name} to ${rule.destinationCountry.name} Visa Requirements`,
+                },
+              ],
+            }),
+          }}
+        />
+
         <h1 className="text-4xl font-bold">
           {rule.passportCountry.name} to{" "}
           {rule.destinationCountry.name} Visa Requirements
