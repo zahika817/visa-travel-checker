@@ -36,9 +36,26 @@ export async function generateMetadata({ params }: PageProps) {
   const passportName = countries.passport.replace(/-/g, " ");
   const destinationName = countries.destination.replace(/-/g, " ");
 
+  const title = `${passportName} to ${destinationName} Visa Requirements (2026)`;
+
+  const description = `Check ${destinationName} visa requirements for ${passportName} passport holders. Find visa type, stay duration, and latest travel information.`;
+
   return {
-    title: `${passportName} to ${destinationName} Visa Requirements (2026)`,
-    description: `Check ${destinationName} visa requirements for ${passportName} passport holders. Find visa type, stay duration, and latest travel information.`,
+    title,
+    description,
+
+    openGraph: {
+      title,
+      description,
+      type: "article",
+      siteName: "Visa & Travel Checker",
+    },
+
+    twitter: {
+      card: "summary",
+      title,
+      description,
+    },
   };
 }
 
