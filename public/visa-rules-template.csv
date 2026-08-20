@@ -1,2 +1,2 @@
-passport,destination,purpose,visaType,requirement,maxStayDays,sourceName,sourceUrl,notes
-PK,FR,TOURISM,TOURIST,VISA_REQUIRED,90,French Embassy,https://example.com,Tourism visa information
+passport,destination,purpose,visaType,requirement,maxStayDays,multipleEntry,ordinaryPassport,effectiveFrom,effectiveUntil,priority,sourceName,sourceUrl,notes
+PK,FR,TOURISM,TOURIST,VISA_REQUIRED,90,false,true,2026-01-01,,100,French Embassy,https://example.com,Tourism visa information

@@ -110,6 +110,25 @@ export async function POST(request: Request) {
             maxStayDays: row.maxStayDays
               ? Number(row.maxStayDays)
               : null,
+
+            multipleEntry:
+              row.multipleEntry?.toLowerCase() === "true",
+
+            ordinaryPassport:
+              row.ordinaryPassport?.toLowerCase() !== "false",
+
+            effectiveFrom: row.effectiveFrom
+              ? new Date(row.effectiveFrom)
+              : null,
+
+            effectiveUntil: row.effectiveUntil
+              ? new Date(row.effectiveUntil)
+              : null,
+
+            priority: row.priority
+              ? Number(row.priority)
+              : 0,
+
             sourceName: row.sourceName || null,
             sourceUrl: row.sourceUrl || null,
             notes: row.notes || null,
