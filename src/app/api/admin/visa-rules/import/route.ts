@@ -32,6 +32,43 @@ export async function POST(request: Request) {
     const created: string[] = [];
     const skipped: string[] = [];
     const errors: string[] = [];
+    const records = [];
+
+    const [countries, purposes, visaTypes] = await Promise.all([
+      prisma.country.findMany(),
+      prisma.travelPurpose.findMany(),
+      prisma.visaType.findMany(),
+    ]);
+
+    const countryMap = new Map(
+      countries.map((item) => [item.code, item])
+    );
+
+    const purposeMap = new Map(
+      purposes.map((item) => [item.code, item])
+    );
+
+    const visaTypeMap = new Map(
+      visaTypes.map((item) => [item.code, item])
+    );
+
+    const existingRules = await prisma.visaRule.findMany({
+      where: {
+        active: true,
+      },
+      select: {
+        passportCountryId: true,
+        destinationCountryId: true,
+        purposeId: true,
+      },
+    });
+
+    const existingSet = new Set(
+      existingRules.map(
+        (item) =>
+          `${item.passportCountryId}-${item.destinationCountryId}-${item.purposeId}`
+      )
+    );
 
     for (const [index, row] of parsed.data.entries()) {
       try {
@@ -56,26 +93,13 @@ export async function POST(request: Request) {
           continue;
         }
 
-        const [passport, destination, purpose, visaType] =
-          await Promise.all([
-            prisma.country.findUnique({
-              where: { code: passportCode },
-            }),
+        const passport = countryMap.get(passportCode);
+        const destination = countryMap.get(destinationCode);
+        const purpose = purposeMap.get(purposeCode);
 
-            prisma.country.findUnique({
-              where: { code: destinationCode },
-            }),
-
-            prisma.travelPurpose.findUnique({
-              where: { code: purposeCode },
-            }),
-
-            visaTypeCode
-              ? prisma.visaType.findUnique({
-                  where: { code: visaTypeCode },
-                })
-              : null,
-          ]);
+        const visaType = visaTypeCode
+          ? visaTypeMap.get(visaTypeCode)
+          : null;
 
         if (!passport || !destination || !purpose) {
           errors.push(
@@ -84,57 +108,49 @@ export async function POST(request: Request) {
           continue;
         }
 
-        const existing = await prisma.visaRule.findFirst({
-          where: {
-            passportCountryId: passport.id,
-            destinationCountryId: destination.id,
-            purposeId: purpose.id,
-            active: true,
-          },
-        });
+        const existingKey =
+          `${passport.id}-${destination.id}-${purpose.id}`;
 
-        if (existing) {
+        if (existingSet.has(existingKey)) {
           skipped.push(
             `${passportCode}-${destinationCode}-${purposeCode}`,
           );
           continue;
         }
 
-        await prisma.visaRule.create({
-          data: {
-            passportCountryId: passport.id,
-            destinationCountryId: destination.id,
-            purposeId: purpose.id,
-            visaTypeId: visaType?.id ?? null,
-            requirement: requirement as VisaRequirement,
-            maxStayDays: row.maxStayDays
-              ? Number(row.maxStayDays)
-              : null,
+        records.push({
+          passportCountryId: passport.id,
+          destinationCountryId: destination.id,
+          purposeId: purpose.id,
+          visaTypeId: visaType?.id ?? null,
+          requirement: requirement as VisaRequirement,
+          maxStayDays: row.maxStayDays
+            ? Number(row.maxStayDays)
+            : null,
 
-            multipleEntry:
-              row.multipleEntry?.toLowerCase() === "true",
+          multipleEntry:
+            row.multipleEntry?.toLowerCase() === "true",
 
-            ordinaryPassport:
-              row.ordinaryPassport?.toLowerCase() !== "false",
+          ordinaryPassport:
+            row.ordinaryPassport?.toLowerCase() !== "false",
 
-            effectiveFrom: row.effectiveFrom
-              ? new Date(row.effectiveFrom)
-              : null,
+          effectiveFrom: row.effectiveFrom
+            ? new Date(row.effectiveFrom)
+            : null,
 
-            effectiveUntil: row.effectiveUntil
-              ? new Date(row.effectiveUntil)
-              : null,
+          effectiveUntil: row.effectiveUntil
+            ? new Date(row.effectiveUntil)
+            : null,
 
-            priority: row.priority
-              ? Number(row.priority)
-              : 0,
+          priority: row.priority
+            ? Number(row.priority)
+            : 0,
 
-            sourceName: row.sourceName || null,
-            sourceUrl: row.sourceUrl || null,
-            notes: row.notes || null,
-            lastVerifiedAt: new Date(),
-            active: true,
-          },
+          sourceName: row.sourceName || null,
+          sourceUrl: row.sourceUrl || null,
+          notes: row.notes || null,
+          lastVerifiedAt: new Date(),
+          active: true,
         });
 
         created.push(
@@ -143,6 +159,12 @@ export async function POST(request: Request) {
       } catch {
         errors.push(`Row ${index + 2}: Import failed`);
       }
+    }
+
+    if (records.length > 0) {
+      await prisma.visaRule.createMany({
+        data: records,
+      });
     }
 
     return NextResponse.json({

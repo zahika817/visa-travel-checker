@@ -10,13 +10,42 @@ export default function Home() {
           </div>
 
           <h1 className="text-4xl font-bold tracking-tight text-zinc-950 sm:text-6xl">
-            Know your visa requirements before you travel.
+            Check Visa Requirements Worldwide Before You Travel
           </h1>
 
           <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-zinc-600 sm:text-lg">
-            Check visa requirements based on your passport, destination, and
-            purpose of travel.
+            Find visa requirements for tourism, study, and work travel
+            based on your passport country and destination.
           </p>
+
+          <div className="mt-8 grid gap-3 sm:grid-cols-3">
+            <div className="rounded-xl border bg-white p-4 shadow-sm">
+              <p className="font-semibold">
+                🌍 Global Coverage
+              </p>
+              <p className="mt-1 text-sm text-zinc-500">
+                Multiple countries and travel routes
+              </p>
+            </div>
+
+            <div className="rounded-xl border bg-white p-4 shadow-sm">
+              <p className="font-semibold">
+                ✅ Structured Data
+              </p>
+              <p className="mt-1 text-sm text-zinc-500">
+                Organized visa requirement information
+              </p>
+            </div>
+
+            <div className="rounded-xl border bg-white p-4 shadow-sm">
+              <p className="font-semibold">
+                ✈️ Travel Purpose Based
+              </p>
+              <p className="mt-1 text-sm text-zinc-500">
+                Tourism, study and work options
+              </p>
+            </div>
+          </div>
         </div>
 
         <VisaChecker />
