@@ -27,16 +27,25 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   });
 
-  const visaPages = rules.map((rule) => ({
-    url: `${process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"}/visa/${rule.passportCountry.slug}-to-${rule.destinationCountry.slug}/${rule.purpose.code.toLowerCase()}`,
-    lastModified: rule.updatedAt,
-  }));
+  const siteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+
+  const uniquePages = new Map();
+
+  rules.forEach((rule) => {
+    const url = `${siteUrl}/visa/${rule.passportCountry.slug}-to-${rule.destinationCountry.slug}/${rule.purpose.code.toLowerCase()}`;
+
+    uniquePages.set(url, {
+      url,
+      lastModified: rule.updatedAt,
+    });
+  });
 
   return [
     {
       url: `${process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"}`,
       lastModified: new Date(),
     },
-    ...visaPages,
+    ...Array.from(uniquePages.values()),
   ];
 }

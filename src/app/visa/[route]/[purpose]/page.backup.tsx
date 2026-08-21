@@ -198,56 +198,25 @@ export default async function VisaRoutePage({
               : "Visa Free"}
           </h2>
 
-          <div className="mt-6 grid gap-4 md:grid-cols-2">
+          <div className="mt-6 space-y-3">
+            <p>
+              Purpose: {rule.purpose.name}
+            </p>
 
-            <div className="rounded-xl bg-zinc-50 p-4">
-              <b>🛂 Visa Status</b>
-              <p className="mt-2">
-                {isVisaRequired(rule.requirement)
-                  ? "Visa Required"
-                  : "Visa Free"}
-              </p>
-            </div>
+            <p>
+              Visa Type: {rule.visaType?.name ?? "-"}
+            </p>
 
-            <div className="rounded-xl bg-zinc-50 p-4">
-              <b>🔖 Visa Type</b>
-              <p className="mt-2">
-                {rule.visaType?.name ?? "-"}
-              </p>
-            </div>
+            <p>
+              Maximum Stay:{" "}
+              {rule.maxStayDays
+                ? `${rule.maxStayDays} days`
+                : "Not specified"}
+            </p>
 
-            <div className="rounded-xl bg-zinc-50 p-4">
-              <b>📅 Maximum Stay</b>
-              <p className="mt-2">
-                {rule.maxStayDays
-                  ? `${rule.maxStayDays} days`
-                  : "Not specified"}
-              </p>
-            </div>
-
-            <div className="rounded-xl bg-zinc-50 p-4">
-              <b>🔁 Multiple Entry</b>
-              <p className="mt-2">
-                {rule.multipleEntry ? "Yes" : "No"}
-              </p>
-            </div>
-
-            <div className="rounded-xl bg-zinc-50 p-4">
-              <b>📘 Passport Type</b>
-              <p className="mt-2">
-                {rule.ordinaryPassport
-                  ? "Ordinary Passport"
-                  : "Special Passport"}
-              </p>
-            </div>
-
-            <div className="rounded-xl bg-zinc-50 p-4">
-              <b>🎯 Travel Purpose</b>
-              <p className="mt-2">
-                {rule.purpose.name}
-              </p>
-            </div>
-
+            <p>
+              Source: {rule.sourceName ?? "-"}
+            </p>
           </div>
 
         </div>
@@ -303,20 +272,10 @@ export default async function VisaRoutePage({
                 <a
                   key={item.id}
                   href={`/visa/${passport.slug}-to-${item.destinationCountry.slug}/${purpose.toLowerCase()}`}
-                  className="block rounded-2xl border bg-zinc-50 p-5 hover:bg-white"
+                  className="block rounded-xl border p-4 hover:bg-zinc-50"
                 >
-                  <p className="font-semibold">
-                    {passport.name} → {item.destinationCountry.name}
-                  </p>
-
-                  <p className="mt-2 text-sm text-zinc-600">
-                    {item.destinationCountry.name} visa requirements for{" "}
-                    {purpose.toLowerCase()} travel
-                  </p>
-
-                  <p className="mt-3 text-sm font-medium">
-                    View Details →
-                  </p>
+                  {passport.name} to{" "}
+                  {item.destinationCountry.name} Visa Requirements
                 </a>
               ))}
 
@@ -342,16 +301,6 @@ export default async function VisaRoutePage({
                     text: isVisaRequired(rule.requirement)
                       ? "A visa is required for this travel purpose."
                       : "A visa is not required for this travel purpose.",
-                  },
-                },
-                {
-                  "@type": "Question",
-                  name: "How long can travelers stay?",
-                  acceptedAnswer: {
-                    "@type": "Answer",
-                    text: rule.maxStayDays
-                      ? `The maximum stay is ${rule.maxStayDays} days.`
-                      : "The maximum stay depends on the applicable visa rules.",
                   },
                 },
               ],

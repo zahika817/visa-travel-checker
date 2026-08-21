@@ -7,32 +7,15 @@ type Option = {
   name: string;
 };
 
-function countryFlag(code: string) {
-  return code
-    .toUpperCase()
-    .replace(/./g, (char) =>
-      String.fromCodePoint(127397 + char.charCodeAt(0))
-    );
-}
-
 type Result = {
-  passport: {
-    name: string;
-    code: string;
-  };
-  destination: {
-    name: string;
-    code: string;
-  };
+  passport: { name: string };
+  destination: { name: string };
   purpose: { name: string };
   requirement: string;
   visaRequired: boolean;
   visaType: { name: string } | null;
   maxStayDays: number | null;
   multipleEntry: boolean;
-  ordinaryPassport: boolean;
-  effectiveFrom: string | null;
-  effectiveUntil: string | null;
   source: {
     name: string | null;
     url: string | null;
@@ -101,37 +84,13 @@ export default function VisaCheckerPage() {
     <main className="min-h-screen bg-zinc-50 p-8 text-zinc-900">
       <div className="mx-auto max-w-4xl">
 
-        <h1 className="text-5xl font-bold tracking-tight">
-          Check Visa Requirements Worldwide
+        <h1 className="text-4xl font-bold">
+          Visa Requirement Checker
         </h1>
 
-        <p className="mt-4 max-w-2xl text-lg text-zinc-600">
-          Find visa requirements using verified travel information
-          from our structured global visa database.
+        <p className="mt-2 text-zinc-600">
+          Check visa requirements from verified travel information.
         </p>
-
-        <div className="mt-6 grid gap-3 sm:grid-cols-3">
-          <div className="rounded-xl border bg-white p-4 shadow-sm">
-            <p className="font-semibold">✓ Verified Sources</p>
-            <p className="text-sm text-zinc-500">
-              Trusted travel information
-            </p>
-          </div>
-
-          <div className="rounded-xl border bg-white p-4 shadow-sm">
-            <p className="font-semibold">✓ Global Coverage</p>
-            <p className="text-sm text-zinc-500">
-              Multiple countries supported
-            </p>
-          </div>
-
-          <div className="rounded-xl border bg-white p-4 shadow-sm">
-            <p className="font-semibold">✓ Updated Rules</p>
-            <p className="text-sm text-zinc-500">
-              Structured visa database
-            </p>
-          </div>
-        </div>
 
         <div className="mt-8 rounded-3xl border bg-white p-6 shadow-sm space-y-4">
 
@@ -207,7 +166,7 @@ export default function VisaCheckerPage() {
             <div className="flex items-center justify-between">
 
               <h2 className="text-2xl font-bold">
-                Visa Requirement Result
+                Visa Result
               </h2>
 
               <span className={
@@ -215,29 +174,15 @@ export default function VisaCheckerPage() {
                 ? "rounded-full bg-red-100 px-4 py-2 text-red-700"
                 : "rounded-full bg-green-100 px-4 py-2 text-green-700"
               }>
-                {result.visaRequired
-                  ? "🔴 Visa Required"
-                  : "🟢 Visa Free"}
+                {result.visaRequired ? "Visa Required" : "Visa Free"}
               </span>
 
             </div>
 
 
-            <div className="mt-6 rounded-2xl bg-zinc-50 p-5">
-              <p className="text-sm text-zinc-500">
-                Travel Route
-              </p>
-
-              <p className="mt-2 text-2xl font-bold">
-                {countryFlag(result.passport.code ?? "")}
-                {" "}
-                {result.passport.name}
-                {" → "}
-                {countryFlag(result.destination.code ?? "")}
-                {" "}
-                {result.destination.name}
-              </p>
-            </div>
+            <p className="mt-6 text-xl font-semibold">
+              {result.passport.name} → {result.destination.name}
+            </p>
 
 
             <div className="mt-6 grid gap-4 md:grid-cols-2">
@@ -269,40 +214,13 @@ export default function VisaCheckerPage() {
                 <p>{result.multipleEntry ? "Yes" : "No"}</p>
               </div>
 
-              <div className="rounded-xl bg-zinc-50 p-4">
-                <b>Passport Type</b>
-                <p>
-                  {result.ordinaryPassport
-                    ? "Ordinary Passport"
-                    : "Special Passport"}
-                </p>
-              </div>
-
-              <div className="rounded-xl bg-zinc-50 p-4">
-                <b>Effective From</b>
-                <p>
-                  {result.effectiveFrom
-                    ? new Date(result.effectiveFrom).toLocaleDateString()
-                    : "Not specified"}
-                </p>
-              </div>
-
-              <div className="rounded-xl bg-zinc-50 p-4">
-                <b>Effective Until</b>
-                <p>
-                  {result.effectiveUntil
-                    ? new Date(result.effectiveUntil).toLocaleDateString()
-                    : "No expiry specified"}
-                </p>
-              </div>
-
             </div>
 
 
             <div className="mt-6 rounded-xl border p-5">
 
-              <h3 className="flex items-center gap-2 text-lg font-bold">
-                ✅ Official Source Verification
+              <h3 className="font-bold">
+                Verified Source
               </h3>
 
               <p className="mt-2">
@@ -340,77 +258,6 @@ export default function VisaCheckerPage() {
 
           </div>
         )}
-
-        <section className="mt-12 rounded-3xl border bg-white p-8 shadow-sm">
-          <h2 className="text-2xl font-bold">
-            Why Use Our Visa Checker?
-          </h2>
-
-          <div className="mt-6 grid gap-4 md:grid-cols-2">
-            <div className="rounded-xl bg-zinc-50 p-4">
-              <b>Verified Information</b>
-              <p className="mt-2 text-sm text-zinc-600">
-                Visa requirements are organized from trusted travel data sources.
-              </p>
-            </div>
-
-            <div className="rounded-xl bg-zinc-50 p-4">
-              <b>Global Coverage</b>
-              <p className="mt-2 text-sm text-zinc-600">
-                Check travel requirements between supported countries.
-              </p>
-            </div>
-
-            <div className="rounded-xl bg-zinc-50 p-4">
-              <b>Purpose Based Results</b>
-              <p className="mt-2 text-sm text-zinc-600">
-                Tourism, study, work and other travel purposes.
-              </p>
-            </div>
-
-            <div className="rounded-xl bg-zinc-50 p-4">
-              <b>Simple Checking</b>
-              <p className="mt-2 text-sm text-zinc-600">
-                Get visa information quickly with a simple search.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        <section className="mt-8 rounded-3xl border bg-white p-8 shadow-sm">
-          <h2 className="text-2xl font-bold">
-            Frequently Asked Questions
-          </h2>
-
-          <div className="mt-6 space-y-4">
-            <div>
-              <h3 className="font-semibold">
-                How can I check visa requirements?
-              </h3>
-              <p className="text-sm text-zinc-600">
-                Select your passport country, destination and travel purpose.
-              </p>
-            </div>
-
-            <div>
-              <h3 className="font-semibold">
-                Is visa information verified?
-              </h3>
-              <p className="text-sm text-zinc-600">
-                Results include source information where available.
-              </p>
-            </div>
-
-            <div>
-              <h3 className="font-semibold">
-                Can visa requirements change?
-              </h3>
-              <p className="text-sm text-zinc-600">
-                Visa policies may change, so always verify before travel.
-              </p>
-            </div>
-          </div>
-        </section>
 
       </div>
     </main>
