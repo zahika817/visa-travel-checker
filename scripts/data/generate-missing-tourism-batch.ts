@@ -63,6 +63,74 @@ const sourceMap: Record<
     name: "French Government",
     url: "https://www.diplomatie.gouv.fr",
   },
+  ES: {
+    name: "Spanish Government",
+    url: "https://www.exteriores.gob.es",
+  },
+  NL: {
+    name: "Netherlands Government",
+    url: "https://www.government.nl",
+  },
+  CH: {
+    name: "Swiss Government",
+    url: "https://www.eda.admin.ch",
+  },
+  AT: {
+    name: "Austrian Government",
+    url: "https://www.bmeia.gv.at",
+  },
+  PT: {
+    name: "Portuguese Government",
+    url: "https://www.portugal.gov.pt",
+  },
+  GR: {
+    name: "Greek Government",
+    url: "https://www.mfa.gr",
+  },
+  QA: {
+    name: "Qatar Government",
+    url: "https://portal.moi.gov.qa",
+  },
+  KW: {
+    name: "Kuwait Government",
+    url: "https://www.moi.gov.kw",
+  },
+  OM: {
+    name: "Oman Government",
+    url: "https://www.moi.gov.om",
+  },
+  BH: {
+    name: "Bahrain Government",
+    url: "https://www.bahrain.bh",
+  },
+  ID: {
+    name: "Indonesia Government",
+    url: "https://www.imigrasi.go.id",
+  },
+  TH: {
+    name: "Thailand Government",
+    url: "https://www.thaievisa.go.th",
+  },
+  VN: {
+    name: "Vietnam Government",
+    url: "https://xuatnhapcanh.gov.vn",
+  },
+  KR: {
+    name: "South Korea Government",
+    url: "https://www.mofa.go.kr",
+  },
+  NZ: {
+    name: "New Zealand Government",
+    url: "https://www.immigration.govt.nz",
+  },
+  ZA: {
+    name: "South Africa Government",
+    url: "https://www.dha.gov.za",
+  },
+  BR: {
+    name: "Brazil Government",
+    url: "https://www.gov.br",
+  },
 };
 
 async function main() {
@@ -97,7 +165,7 @@ async function main() {
       ordinaryPassport: "true",
       sourceName:
         sourceMap[destination]?.name ??
-        "Official Government Immigration Source",
+        "Official Immigration Authority",
       sourceUrl:
         sourceMap[destination]?.url ?? "",
       notes:
