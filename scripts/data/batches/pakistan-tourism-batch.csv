@@ -1,0 +1,11 @@
+passport,destination,purpose,visaType,requirement,maxStayDays,multipleEntry,ordinaryPassport,sourceName,sourceUrl,notes
+"PK","GB","TOURISM","TOURIST","VISA_REQUIRED","90","false","true","Official Government Immigration Source","","Tourism visa requirement information for Pakistani passport holders."
+"PK","US","TOURISM","TOURIST","VISA_REQUIRED","90","false","true","Official Government Immigration Source","","Tourism visa requirement information for Pakistani passport holders."
+"PK","CA","TOURISM","TOURIST","VISA_REQUIRED","90","false","true","Official Government Immigration Source","","Tourism visa requirement information for Pakistani passport holders."
+"PK","AU","TOURISM","TOURIST","VISA_REQUIRED","90","false","true","Official Government Immigration Source","","Tourism visa requirement information for Pakistani passport holders."
+"PK","DE","TOURISM","TOURIST","VISA_REQUIRED","90","false","true","Official Government Immigration Source","","Tourism visa requirement information for Pakistani passport holders."
+"PK","FR","TOURISM","TOURIST","VISA_REQUIRED","90","false","true","Official Government Immigration Source","","Tourism visa requirement information for Pakistani passport holders."
+"PK","TR","TOURISM","TOURIST","VISA_REQUIRED","90","false","true","Official Government Immigration Source","","Tourism visa requirement information for Pakistani passport holders."
+"PK","AE","TOURISM","TOURIST","VISA_REQUIRED","90","false","true","Official Government Immigration Source","","Tourism visa requirement information for Pakistani passport holders."
+"PK","SA","TOURISM","TOURIST","VISA_REQUIRED","90","false","true","Official Government Immigration Source","","Tourism visa requirement information for Pakistani passport holders."
+"PK","JP","TOURISM","TOURIST","VISA_REQUIRED","90","false","true","Official Government Immigration Source","","Tourism visa requirement information for Pakistani passport holders."
