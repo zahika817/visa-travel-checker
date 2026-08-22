@@ -5,6 +5,9 @@ import path from "path";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "@prisma/client";
 
+import { sourceMap } from "./config/sources";
+import { tourismDestinations } from "./config/tourism-destinations";
+
 const prisma = new PrismaClient({
   adapter: new PrismaPg({
     connectionString: process.env.DATABASE_URL!,
@@ -14,124 +17,7 @@ const prisma = new PrismaClient({
 const passportCode =
   process.argv[2]?.toUpperCase() ?? "PK";
 
-const targetDestinations = [
-  "ES",
-  "NL",
-  "CH",
-  "AT",
-  "PT",
-  "GR",
-  "EG",
-  "QA",
-  "KW",
-  "OM",
-  "BH",
-  "ID",
-  "TH",
-  "VN",
-  "KR",
-  "NZ",
-  "ZA",
-  "BR",
-];
 
-const sourceMap: Record<
-  string,
-  { name: string; url: string }
-> = {
-  GB: {
-    name: "UK Government",
-    url: "https://www.gov.uk",
-  },
-  US: {
-    name: "U.S. Department of State",
-    url: "https://travel.state.gov",
-  },
-  CA: {
-    name: "Government of Canada",
-    url: "https://www.canada.ca",
-  },
-  AU: {
-    name: "Australian Government",
-    url: "https://www.homeaffairs.gov.au",
-  },
-  DE: {
-    name: "German Government",
-    url: "https://www.auswaertiges-amt.de",
-  },
-  FR: {
-    name: "French Government",
-    url: "https://www.diplomatie.gouv.fr",
-  },
-  ES: {
-    name: "Spanish Government",
-    url: "https://www.exteriores.gob.es",
-  },
-  NL: {
-    name: "Netherlands Government",
-    url: "https://www.government.nl",
-  },
-  CH: {
-    name: "Swiss Government",
-    url: "https://www.eda.admin.ch",
-  },
-  AT: {
-    name: "Austrian Government",
-    url: "https://www.bmeia.gv.at",
-  },
-  PT: {
-    name: "Portuguese Government",
-    url: "https://www.portugal.gov.pt",
-  },
-  GR: {
-    name: "Greek Government",
-    url: "https://www.mfa.gr",
-  },
-  QA: {
-    name: "Qatar Government",
-    url: "https://portal.moi.gov.qa",
-  },
-  KW: {
-    name: "Kuwait Government",
-    url: "https://www.moi.gov.kw",
-  },
-  OM: {
-    name: "Oman Government",
-    url: "https://www.moi.gov.om",
-  },
-  BH: {
-    name: "Bahrain Government",
-    url: "https://www.bahrain.bh",
-  },
-  ID: {
-    name: "Indonesia Government",
-    url: "https://www.imigrasi.go.id",
-  },
-  TH: {
-    name: "Thailand Government",
-    url: "https://www.thaievisa.go.th",
-  },
-  VN: {
-    name: "Vietnam Government",
-    url: "https://xuatnhapcanh.gov.vn",
-  },
-  KR: {
-    name: "South Korea Government",
-    url: "https://www.mofa.go.kr",
-  },
-  NZ: {
-    name: "New Zealand Government",
-    url: "https://www.immigration.govt.nz",
-  },
-  ZA: {
-    name: "South Africa Government",
-    url: "https://www.dha.gov.za",
-  },
-  BR: {
-    name: "Brazil Government",
-    url: "https://www.gov.br",
-  },
-};
 
 async function main() {
   const existing = await prisma.visaRule.findMany({
@@ -152,7 +38,7 @@ async function main() {
     existing.map((item) => item.destinationCountry.code)
   );
 
-  const rows = targetDestinations
+  const rows = tourismDestinations
     .filter((code) => !existingCodes.has(code))
     .map((destination) => ({
       passport: passportCode,
