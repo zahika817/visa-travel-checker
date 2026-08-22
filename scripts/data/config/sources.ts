@@ -62,4 +62,8 @@ export const sourceMap: Record<
     name: "New Zealand Immigration",
     url: "https://www.immigration.govt.nz",
   },
+  SA: {
+    name: "Saudi Government",
+    url: "https://www.mofa.gov.sa",
+  },
 };

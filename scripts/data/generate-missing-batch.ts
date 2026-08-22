@@ -7,6 +7,7 @@ import { PrismaClient } from "@prisma/client";
 
 import { sourceMap } from "./config/sources";
 import { businessDestinations } from "./config/business-destinations";
+import { religiousDestinations } from "./config/religious-destinations";
 import { studyDestinations } from "./config/study-destinations";
 import { tourismDestinations } from "./config/tourism-destinations";
 import { workDestinations } from "./config/work-destinations";
@@ -30,7 +31,9 @@ const visaType =
       ? "WORK"
       : purposeCode === "BUSINESS"
         ? "BUSINESS"
-        : "TOURIST";
+        : purposeCode === "RELIGIOUS"
+          ? "RELIGIOUS"
+          : "TOURIST";
 
 const destinations =
   purposeCode === "STUDY"
@@ -39,7 +42,9 @@ const destinations =
       ? workDestinations
       : purposeCode === "BUSINESS"
         ? businessDestinations
-        : tourismDestinations;
+        : purposeCode === "RELIGIOUS"
+          ? religiousDestinations
+          : tourismDestinations;
 
 async function main() {
   const existing = await prisma.visaRule.findMany({
