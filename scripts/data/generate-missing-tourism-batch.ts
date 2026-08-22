@@ -35,6 +35,36 @@ const targetDestinations = [
   "BR",
 ];
 
+const sourceMap: Record<
+  string,
+  { name: string; url: string }
+> = {
+  GB: {
+    name: "UK Government",
+    url: "https://www.gov.uk",
+  },
+  US: {
+    name: "U.S. Department of State",
+    url: "https://travel.state.gov",
+  },
+  CA: {
+    name: "Government of Canada",
+    url: "https://www.canada.ca",
+  },
+  AU: {
+    name: "Australian Government",
+    url: "https://www.homeaffairs.gov.au",
+  },
+  DE: {
+    name: "German Government",
+    url: "https://www.auswaertiges-amt.de",
+  },
+  FR: {
+    name: "French Government",
+    url: "https://www.diplomatie.gouv.fr",
+  },
+};
+
 async function main() {
   const existing = await prisma.visaRule.findMany({
     where: {
@@ -65,10 +95,13 @@ async function main() {
       maxStayDays: "90",
       multipleEntry: "false",
       ordinaryPassport: "true",
-      sourceName: "Official Government Immigration Source",
-      sourceUrl: "",
+      sourceName:
+        sourceMap[destination]?.name ??
+        "Official Government Immigration Source",
+      sourceUrl:
+        sourceMap[destination]?.url ?? "",
       notes:
-        "Tourism visa requirement information for Pakistani passport holders.",
+        `Tourism visa requirement information for ${passportCode} passport holders.`,
     }));
 
   const header = Object.keys(rows[0] ?? {}).join(",");
