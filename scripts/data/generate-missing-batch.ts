@@ -8,6 +8,7 @@ import { PrismaClient } from "@prisma/client";
 import { sourceMap } from "./config/sources";
 import { studyDestinations } from "./config/study-destinations";
 import { tourismDestinations } from "./config/tourism-destinations";
+import { workDestinations } from "./config/work-destinations";
 
 const prisma = new PrismaClient({
   adapter: new PrismaPg({
@@ -33,7 +34,9 @@ const visaType =
 const destinations =
   purposeCode === "STUDY"
     ? studyDestinations
-    : tourismDestinations;
+    : purposeCode === "WORK"
+      ? workDestinations
+      : tourismDestinations;
 
 async function main() {
   const existing = await prisma.visaRule.findMany({
