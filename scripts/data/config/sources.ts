@@ -42,4 +42,24 @@ export const sourceMap: Record<
     name: "Austrian Government",
     url: "https://www.bmeia.gv.at",
   },
+  AE: {
+    name: "UAE Government",
+    url: "https://u.ae",
+  },
+  SG: {
+    name: "Singapore Government",
+    url: "https://www.mfa.gov.sg",
+  },
+  JP: {
+    name: "Japan Government",
+    url: "https://www.mofa.go.jp",
+  },
+  KR: {
+    name: "South Korea Government",
+    url: "https://www.mofa.go.kr",
+  },
+  NZ: {
+    name: "New Zealand Immigration",
+    url: "https://www.immigration.govt.nz",
+  },
 };
