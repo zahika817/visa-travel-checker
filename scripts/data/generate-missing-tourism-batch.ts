@@ -11,6 +11,9 @@ const prisma = new PrismaClient({
   }),
 });
 
+const passportCode =
+  process.argv[2]?.toUpperCase() ?? "PK";
+
 const targetDestinations = [
   "ES",
   "NL",
@@ -36,7 +39,7 @@ async function main() {
   const existing = await prisma.visaRule.findMany({
     where: {
       passportCountry: {
-        code: "PK",
+        code: passportCode,
       },
       purpose: {
         code: "TOURISM",
@@ -54,7 +57,7 @@ async function main() {
   const rows = targetDestinations
     .filter((code) => !existingCodes.has(code))
     .map((destination) => ({
-      passport: "PK",
+      passport: passportCode,
       destination,
       purpose: "TOURISM",
       visaType: "TOURIST",
@@ -81,7 +84,7 @@ async function main() {
 
   const output = path.join(
     process.cwd(),
-    "scripts/data/batches/pakistan-tourism-missing.csv",
+    `scripts/data/batches/${passportCode}-tourism-missing.csv`,
   );
 
   fs.writeFileSync(output, csv);
