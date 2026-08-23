@@ -37,6 +37,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   });
 
+  const countries = await prisma.country.findMany({
+    where: {
+      active: true,
+    },
+    select: {
+      slug: true,
+      updatedAt: true,
+    },
+  });
+
   const siteUrl =
     process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
@@ -54,10 +64,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   });
 
   countries.forEach((country) => {
-    const url = `${siteUrl}/visa/passport/${country.slug}`;
+    const passportUrl = `${siteUrl}/visa/passport/${country.slug}`;
 
-    uniquePages.set(url, {
-      url,
+    uniquePages.set(passportUrl, {
+      url: passportUrl,
+      lastModified: country.updatedAt,
+      changeFrequency: "monthly",
+      priority: 0.7,
+    });
+
+    const destinationUrl = `${siteUrl}/visa/country/${country.slug}`;
+
+    uniquePages.set(destinationUrl, {
+      url: destinationUrl,
       lastModified: country.updatedAt,
       changeFrequency: "monthly",
       priority: 0.7,
