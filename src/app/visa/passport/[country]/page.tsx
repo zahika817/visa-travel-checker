@@ -68,6 +68,29 @@ export default async function PassportPage({
     take: 20,
   });
 
+  const totalRoutes = await prisma.visaRule.count({
+    where: {
+      passportCountryId: passport.id,
+      active: true,
+    },
+  });
+
+  const visaRequired = await prisma.visaRule.count({
+    where: {
+      passportCountryId: passport.id,
+      active: true,
+      requirement: "VISA_REQUIRED",
+    },
+  });
+
+  const visaFree = await prisma.visaRule.count({
+    where: {
+      passportCountryId: passport.id,
+      active: true,
+      requirement: "VISA_FREE",
+    },
+  });
+
   return (
     <main className="min-h-screen bg-zinc-50 p-8">
       <div className="mx-auto max-w-4xl">
@@ -80,6 +103,39 @@ export default async function PassportPage({
           Find visa requirements for {passport.name} passport
           holders traveling worldwide.
         </p>
+
+        <div className="mt-8 grid gap-4 md:grid-cols-3">
+
+          <div className="rounded-2xl border bg-white p-5">
+            <p className="text-sm text-zinc-500">
+              Total Routes
+            </p>
+            <p className="mt-2 text-3xl font-bold">
+              {totalRoutes}
+            </p>
+          </div>
+
+          <div className="rounded-2xl border bg-white p-5">
+            <p className="text-sm text-zinc-500">
+              Visa Required
+            </p>
+            <p className="mt-2 text-3xl font-bold">
+              {visaRequired}
+            </p>
+          </div>
+
+          <div className="rounded-2xl border bg-white p-5">
+            <p className="text-sm text-zinc-500">
+              Visa Free
+            </p>
+            <p className="mt-2 text-3xl font-bold">
+              {visaFree}
+            </p>
+          </div>
+
+        </div>
+
+
 
         <div className="mt-8 space-y-4">
           {rules.map((rule) => (
