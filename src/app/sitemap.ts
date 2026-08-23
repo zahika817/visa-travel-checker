@@ -37,16 +37,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   });
 
-  const countries = await prisma.country.findMany({
-    where: {
-      active: true,
-    },
-    select: {
-      slug: true,
-      updatedAt: true,
-    },
-  });
-
   const siteUrl =
     process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
