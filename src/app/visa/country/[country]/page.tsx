@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import Script from "next/script";
 import { prisma } from "@/lib/db";
 
 type PageProps = {
@@ -102,6 +103,44 @@ export default async function DestinationPage({
           travelers visiting {destination.name}.
         </p>
 
+        <Script
+          id="destination-faq-schema"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              "mainEntity": [
+                {
+                  "@type": "Question",
+                  "name": `Do travelers need a visa for ${destination.name}?`,
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": `Visa requirements for ${destination.name} depend on the traveler's passport and travel purpose.`
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": `What visa purposes are available for ${destination.name}?`,
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": `Available purposes include ${purposes.map((p) => p.name).join(", ")}.`
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": `How many visa routes are available for ${destination.name}?`,
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": `${destination.name} has ${totalRoutes} available visa routes.`
+                  }
+                }
+              ]
+            }),
+          }}
+        />
+
+
         <div className="mt-8 rounded-2xl border bg-white p-6">
           <p className="text-sm text-zinc-500">
             Available Visa Routes
@@ -111,6 +150,44 @@ export default async function DestinationPage({
             {totalRoutes}
           </p>
         </div>
+
+        <Script
+          id="destination-faq-schema"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              "mainEntity": [
+                {
+                  "@type": "Question",
+                  "name": `Do travelers need a visa for ${destination.name}?`,
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": `Visa requirements for ${destination.name} depend on the traveler's passport and travel purpose.`
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": `What visa purposes are available for ${destination.name}?`,
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": `Available purposes include ${purposes.map((p) => p.name).join(", ")}.`
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": `How many visa routes are available for ${destination.name}?`,
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": `${destination.name} has ${totalRoutes} available visa routes.`
+                  }
+                }
+              ]
+            }),
+          }}
+        />
+
 
         <div className="mt-8 rounded-2xl border bg-white p-6">
           <h2 className="text-xl font-bold">
