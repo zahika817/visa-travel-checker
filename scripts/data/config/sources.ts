@@ -66,4 +66,8 @@ export const sourceMap: Record<
     name: "Saudi Government",
     url: "https://www.mofa.gov.sa",
   },
+  QA: {
+    name: "Qatar Government",
+    url: "https://portal.moi.gov.qa",
+  },
 };
