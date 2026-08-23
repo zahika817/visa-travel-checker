@@ -75,6 +75,20 @@ export default async function DestinationPage({
     },
   });
 
+  const purposes = await prisma.travelPurpose.findMany({
+    where: {
+      visaRules: {
+        some: {
+          destinationCountryId: destination.id,
+          active: true,
+        },
+      },
+    },
+    select: {
+      name: true,
+    },
+  });
+
   return (
     <main className="min-h-screen bg-zinc-50 p-8">
       <div className="mx-auto max-w-4xl">
@@ -97,6 +111,25 @@ export default async function DestinationPage({
             {totalRoutes}
           </p>
         </div>
+
+        <div className="mt-8 rounded-2xl border bg-white p-6">
+          <h2 className="text-xl font-bold">
+            Available Travel Purposes
+          </h2>
+
+          <div className="mt-4 flex flex-wrap gap-3">
+            {purposes.map((purpose) => (
+              <span
+                key={purpose.name}
+                className="rounded-full bg-zinc-100 px-4 py-2 text-sm"
+              >
+                {purpose.name}
+              </span>
+            ))}
+          </div>
+        </div>
+
+
 
         <div className="mt-8 space-y-4">
           {rules.map((rule) => (
