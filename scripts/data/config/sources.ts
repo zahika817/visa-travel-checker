@@ -70,4 +70,8 @@ export const sourceMap: Record<
     name: "Qatar Government",
     url: "https://portal.moi.gov.qa",
   },
+  OM: {
+    name: "Oman Government",
+    url: "https://www.moi.gov.om",
+  },
 };
