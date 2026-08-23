@@ -362,6 +362,30 @@ export default async function VisaRoutePage({
 
 
         <Script
+          id="article-schema"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Article",
+              "headline": `${rule.passportCountry.name} to ${rule.destinationCountry.name} Visa Requirements`,
+              "description": `Visa requirements for ${rule.passportCountry.name} passport holders traveling to ${rule.destinationCountry.name} for ${rule.purpose.name.toLowerCase()} purposes.`,
+              "dateModified": rule.lastVerifiedAt ?? rule.effectiveFrom,
+              "author": {
+                "@type": "Organization",
+                "name": "Visa Requirement Checker"
+              },
+              "publisher": {
+                "@type": "Organization",
+                "name": "Visa Requirement Checker"
+              }
+            }),
+          }}
+        />
+
+
+
+        <Script
           id="faq-schema"
           type="application/ld+json"
           dangerouslySetInnerHTML={{
