@@ -38,13 +38,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     uniquePages.set(url, {
       url,
       lastModified: rule.updatedAt,
+      changeFrequency: "monthly",
+      priority: 0.8,
     });
   });
 
   return [
     {
-      url: `${process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"}`,
+      url: siteUrl,
       lastModified: new Date(),
+      changeFrequency: "daily",
+      priority: 1,
     },
     ...Array.from(uniquePages.values()),
   ];
