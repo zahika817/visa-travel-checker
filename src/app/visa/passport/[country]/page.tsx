@@ -137,6 +137,43 @@ export default async function PassportPage({
 
 
 
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              "mainEntity": [
+                {
+                  "@type": "Question",
+                  "name": `Do ${passport.name} passport holders need visas?`,
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": `Visa requirements for ${passport.name} passport holders depend on the destination country and travel purpose.`
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": `How many visa routes are available for ${passport.name} passport holders?`,
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": `${passport.name} passport holders can check ${totalRoutes} available visa routes and travel requirements on this website.`
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": `Where can I check ${passport.name} visa requirements?`,
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": `You can check destination-specific visa requirements for ${passport.name} passport holders using the available visa route pages.`
+                  }
+                }
+              ]
+            }),
+          }}
+        />
+
+
         <div className="mt-8 space-y-4">
           {rules.map((rule) => (
             <div
