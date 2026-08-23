@@ -151,6 +151,13 @@ export default async function PassportPage({
               <p className="mt-2">
                 Purpose: {rule.purpose.name}
               </p>
+
+              <a
+                href={`/visa/${passport.slug}-to-${rule.destinationCountry.slug}/${rule.purpose.code.toLowerCase()}`}
+                className="mt-4 inline-block text-blue-600 underline"
+              >
+                View Visa Requirements →
+              </a>
             </div>
           ))}
         </div>
