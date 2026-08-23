@@ -11,6 +11,46 @@ type PageProps = {
   }>;
 };
 
+export async function generateStaticParams() {
+  const rules = await prisma.visaRule.findMany({
+    where: {
+      active: true,
+    },
+    select: {
+      passportCountry: {
+        select: {
+          slug: true,
+        },
+      },
+      destinationCountry: {
+        select: {
+          slug: true,
+        },
+      },
+      purpose: {
+        select: {
+          code: true,
+        },
+      },
+    },
+  });
+
+  const uniqueRoutes = new Map();
+
+  for (const rule of rules) {
+    const key = `${rule.passportCountry.slug}-to-${rule.destinationCountry.slug}-${rule.purpose.code.toLowerCase()}`;
+
+    uniqueRoutes.set(key, {
+      route: `${rule.passportCountry.slug}-to-${rule.destinationCountry.slug}`,
+      purpose: rule.purpose.code.toLowerCase(),
+    });
+  }
+
+  return Array.from(uniqueRoutes.values());
+}
+
+
+
 function parseRoute(route: string) {
   const parts = route.split("-to-");
 
