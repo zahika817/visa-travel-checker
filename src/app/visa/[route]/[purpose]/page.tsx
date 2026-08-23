@@ -290,6 +290,41 @@ export default async function VisaRoutePage({
         </div>
 
 
+        <div className="mt-8 rounded-3xl border bg-white p-8">
+          <h2 className="text-2xl font-bold">
+            Official Visa Information Source
+          </h2>
+
+          <p className="mt-4 text-zinc-600">
+            This information is based on:
+          </p>
+
+          <p className="mt-3 font-semibold">
+            {rule.sourceName ?? "Official Government Source"}
+          </p>
+
+          {rule.sourceUrl && (
+            <a
+              href={rule.sourceUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-2 block text-blue-600 underline"
+            >
+              Visit official source →
+            </a>
+          )}
+
+          <p className="mt-4 text-sm text-zinc-500">
+            Last verified:
+            {" "}
+            {rule.lastVerifiedAt
+              ? new Date(rule.lastVerifiedAt).toLocaleDateString()
+              : "Not available"}
+          </p>
+        </div>
+
+
+
         {relatedRules.length > 0 && (
           <div className="mt-8 rounded-3xl border bg-white p-8">
 
