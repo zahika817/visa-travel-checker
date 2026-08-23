@@ -74,4 +74,8 @@ export const sourceMap: Record<
     name: "Oman Government",
     url: "https://www.moi.gov.om",
   },
+  BH: {
+    name: "Bahrain Government",
+    url: "https://www.bahrain.bh",
+  },
 };
