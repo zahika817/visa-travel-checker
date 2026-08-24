@@ -92,14 +92,14 @@ export default async function PassportPage({
   });
 
   return (
-    <main className="min-h-screen bg-zinc-50 p-8">
+    <main className="min-h-screen bg-zinc-50 p-8 text-zinc-900">
       <div className="mx-auto max-w-4xl">
 
-        <h1 className="text-4xl font-bold">
+        <h1 className="text-4xl font-bold text-zinc-900">
           {passport.name} Passport Visa Requirements
         </h1>
 
-        <p className="mt-4 text-zinc-600">
+        <p className="mt-4 text-zinc-700">
           Find visa requirements for {passport.name} passport
           holders traveling worldwide.
         </p>
@@ -110,7 +110,7 @@ export default async function PassportPage({
             <p className="text-sm text-zinc-500">
               Total Routes
             </p>
-            <p className="mt-2 text-3xl font-bold">
+            <p className="mt-2 text-3xl font-bold text-zinc-900">
               {totalRoutes}
             </p>
           </div>
@@ -119,7 +119,7 @@ export default async function PassportPage({
             <p className="text-sm text-zinc-500">
               Visa Required
             </p>
-            <p className="mt-2 text-3xl font-bold">
+            <p className="mt-2 text-3xl font-bold text-zinc-900">
               {visaRequired}
             </p>
           </div>
@@ -128,7 +128,7 @@ export default async function PassportPage({
             <p className="text-sm text-zinc-500">
               Visa Free
             </p>
-            <p className="mt-2 text-3xl font-bold">
+            <p className="mt-2 text-3xl font-bold text-zinc-900">
               {visaFree}
             </p>
           </div>
@@ -180,7 +180,7 @@ export default async function PassportPage({
               key={rule.id}
               className="rounded-2xl border bg-white p-5"
             >
-              <h2 className="font-bold">
+              <h2 className="font-bold text-zinc-900">
                 {passport.name} to{" "}
                 {rule.destinationCountry.name}
               </h2>
