@@ -1,6 +1,21 @@
 import VisaChecker from "@/components/visa/VisaChecker";
+import Link from "next/link";
+import { prisma } from "@/lib/db";
 
-export default function Home() {
+export default async function Home() {
+
+  const popularRoutes = await prisma.visaRule.findMany({
+    where: {
+      active: true,
+    },
+    include: {
+      passportCountry: true,
+      destinationCountry: true,
+      purpose: true,
+    },
+    take: 6,
+  });
+
   return (
     <main className="min-h-screen bg-zinc-50">
       <section className="mx-auto flex min-h-screen max-w-6xl flex-col items-center justify-center px-6 py-16">
@@ -49,6 +64,31 @@ export default function Home() {
         </div>
 
         <VisaChecker />
+
+        <section className="mt-16 w-full">
+          <h2 className="text-2xl font-bold text-center">
+            Popular Visa Routes
+          </h2>
+
+          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {popularRoutes.map((route) => (
+              <Link
+                key={route.id}
+                href={`/visa/${route.passportCountry.slug}-to-${route.destinationCountry.slug}/${route.purpose.code.toLowerCase()}`}
+                className="rounded-2xl border bg-white p-5 hover:shadow"
+              >
+                <h3 className="font-semibold">
+                  {route.passportCountry.name} →{" "}
+                  {route.destinationCountry.name}
+                </h3>
+
+                <p className="mt-2 text-sm text-zinc-500">
+                  {route.purpose.name} visa requirements
+                </p>
+              </Link>
+            ))}
+          </div>
+        </section>
       </section>
     </main>
   );
