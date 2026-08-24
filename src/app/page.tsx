@@ -91,7 +91,7 @@ export default async function Home() {
         <VisaChecker />
 
         <section className="mt-16 w-full rounded-3xl border bg-white p-8">
-          <h2 className="text-3xl font-bold">
+          <h2 className="text-3xl font-bold text-zinc-900">
             About Visa Requirement Checker
           </h2>
 
