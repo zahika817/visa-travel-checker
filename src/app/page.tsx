@@ -28,6 +28,18 @@ export default async function Home() {
     take: 6,
   });
 
+  const passportGuides = await prisma.country.findMany({
+    where: {
+      active: true,
+    },
+    orderBy: {
+      passportRules: {
+        _count: "desc",
+      },
+    },
+    take: 6,
+  });
+
   return (
     <main className="min-h-screen bg-zinc-50">
       <section className="mx-auto flex min-h-screen max-w-6xl flex-col items-center justify-center px-6 py-16">
@@ -101,6 +113,32 @@ export default async function Home() {
             ))}
           </div>
         </section>
+        <section className="mt-16 w-full">
+          <h2 className="text-2xl font-bold text-center">
+            Passport Guides
+          </h2>
+
+          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {passportGuides.map((country) => (
+              <Link
+                key={country.id}
+                href={`/visa/passport/${country.slug}`}
+                className="rounded-2xl border bg-white p-5 hover:shadow"
+              >
+                <h3 className="font-semibold">
+                  {country.name} Passport Visa Requirements
+                </h3>
+
+                <p className="mt-2 text-sm text-zinc-500">
+                  Explore visa rules for {country.name} passport holders
+                </p>
+              </Link>
+            ))}
+          </div>
+        </section>
+
+
+
         <section className="mt-16 w-full">
           <h2 className="text-2xl font-bold text-center">
             Popular Destinations
