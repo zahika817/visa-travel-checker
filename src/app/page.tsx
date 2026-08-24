@@ -1,4 +1,5 @@
 import VisaChecker from "@/components/visa/VisaChecker";
+import Script from "next/script";
 import Link from "next/link";
 import { prisma } from "@/lib/db";
 
@@ -88,6 +89,51 @@ export default async function Home() {
         </div>
 
         <VisaChecker />
+
+        <Script
+          id="homepage-faq-schema"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              "mainEntity": [
+                {
+                  "@type": "Question",
+                  "name": "What is a visa requirement checker?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "A visa requirement checker helps travelers find visa rules based on their passport country, destination and travel purpose."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "How can I check visa requirements?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Select your passport country, destination country and travel purpose to view visa information."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Are visa rules updated?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Visa requirements are maintained using structured travel information and official source references."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Which travel purposes are supported?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "The checker supports common travel purposes including tourism, work and study."
+                  }
+                }
+              ]
+            }),
+          }}
+        />
 
         <section className="mt-16 w-full">
           <h2 className="text-2xl font-bold text-center">
