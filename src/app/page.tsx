@@ -90,6 +90,33 @@ export default async function Home() {
 
         <VisaChecker />
 
+        <section className="mt-16 w-full rounded-3xl border bg-white p-8">
+          <h2 className="text-3xl font-bold">
+            About Visa Requirement Checker
+          </h2>
+
+          <div className="mt-5 space-y-4 text-zinc-600 leading-7">
+            <p>
+              Planning international travel requires understanding visa
+              requirements before departure. Our visa checker helps
+              travelers find entry rules based on their passport country,
+              destination and travel purpose.
+            </p>
+
+            <p>
+              Explore visa information for tourism, work and study travel.
+              Compare destination requirements, maximum stay periods,
+              visa types and important travel details.
+            </p>
+
+            <p>
+              Whether you are planning a holiday, business trip or
+              international relocation, use our structured visa guides
+              to understand travel requirements worldwide.
+            </p>
+          </div>
+        </section>
+
         <Script
           id="homepage-faq-schema"
           type="application/ld+json"
