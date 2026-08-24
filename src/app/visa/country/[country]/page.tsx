@@ -91,14 +91,14 @@ export default async function DestinationPage({
   });
 
   return (
-    <main className="min-h-screen bg-zinc-50 p-8">
+    <main className="min-h-screen bg-zinc-50 p-8 text-zinc-900">
       <div className="mx-auto max-w-4xl">
 
-        <h1 className="text-4xl font-bold">
+        <h1 className="text-4xl font-bold text-zinc-900">
           {destination.name} Visa Requirements
         </h1>
 
-        <p className="mt-4 text-zinc-600">
+        <p className="mt-4 text-zinc-700">
           Find visa requirements and travel information for
           travelers visiting {destination.name}.
         </p>
@@ -146,7 +146,7 @@ export default async function DestinationPage({
             Available Visa Routes
           </p>
 
-          <p className="mt-2 text-3xl font-bold">
+          <p className="mt-2 text-3xl font-bold text-zinc-900">
             {totalRoutes}
           </p>
         </div>
@@ -190,7 +190,7 @@ export default async function DestinationPage({
 
 
         <div className="mt-8 rounded-2xl border bg-white p-6">
-          <h2 className="text-xl font-bold">
+          <h2 className="text-xl font-bold text-zinc-900">
             Available Travel Purposes
           </h2>
 
@@ -214,7 +214,7 @@ export default async function DestinationPage({
               key={rule.id}
               className="rounded-2xl border bg-white p-5"
             >
-              <h2 className="font-bold">
+              <h2 className="font-bold text-zinc-900">
                 {rule.passportCountry.name} to{" "}
                 {destination.name}
               </h2>
