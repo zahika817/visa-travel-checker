@@ -44,7 +44,7 @@ export default async function Home() {
   return (
     <main className="min-h-screen bg-zinc-50">
       <section className="mx-auto flex min-h-screen max-w-6xl flex-col items-center justify-start px-6 py-20">
-        <div className="mb-10 max-w-3xl text-center">
+        <div className="mb-10 max-w-5xl text-center">
           <div className="mb-4 inline-flex rounded-full border border-zinc-200 bg-white px-4 py-2 text-xs font-semibold uppercase tracking-wider text-zinc-500">
             Visa & Travel Checker
           </div>
