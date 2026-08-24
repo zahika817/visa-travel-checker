@@ -43,13 +43,13 @@ export default async function Home() {
 
   return (
     <main className="min-h-screen bg-zinc-50">
-      <section className="mx-auto flex min-h-screen max-w-6xl flex-col items-center justify-center px-6 py-16">
+      <section className="mx-auto flex min-h-screen max-w-6xl flex-col items-center justify-start px-6 py-20">
         <div className="mb-10 max-w-3xl text-center">
           <div className="mb-4 inline-flex rounded-full border border-zinc-200 bg-white px-4 py-2 text-xs font-semibold uppercase tracking-wider text-zinc-500">
             Visa & Travel Checker
           </div>
 
-          <h1 className="text-4xl font-bold tracking-tight text-zinc-950 sm:text-6xl">
+          <h1 className="text-4xl font-extrabold tracking-tight text-zinc-950 sm:text-5xl lg:text-6xl">
             Check Visa Requirements Worldwide Before You Travel
           </h1>
 
@@ -60,28 +60,28 @@ export default async function Home() {
 
           <div className="mt-8 grid gap-3 sm:grid-cols-3">
             <div className="rounded-xl border bg-white p-4 shadow-sm">
-              <p className="font-semibold">
+              <p className="font-semibold text-zinc-900">
                 🌍 Global Coverage
               </p>
-              <p className="mt-1 text-sm text-zinc-500">
+              <p className="mt-1 text-sm text-zinc-600">
                 Multiple countries and travel routes
               </p>
             </div>
 
             <div className="rounded-xl border bg-white p-4 shadow-sm">
-              <p className="font-semibold">
+              <p className="font-semibold text-zinc-900">
                 ✅ Structured Data
               </p>
-              <p className="mt-1 text-sm text-zinc-500">
+              <p className="mt-1 text-sm text-zinc-600">
                 Organized visa requirement information
               </p>
             </div>
 
             <div className="rounded-xl border bg-white p-4 shadow-sm">
-              <p className="font-semibold">
+              <p className="font-semibold text-zinc-900">
                 ✈️ Travel Purpose Based
               </p>
-              <p className="mt-1 text-sm text-zinc-500">
+              <p className="mt-1 text-sm text-zinc-600">
                 Tourism, study and work options
               </p>
             </div>
@@ -179,7 +179,7 @@ export default async function Home() {
                   {route.destinationCountry.name}
                 </h3>
 
-                <p className="mt-2 text-sm text-zinc-500">
+                <p className="mt-2 text-sm text-zinc-600">
                   {route.purpose.name} visa requirements
                 </p>
               </Link>
@@ -202,7 +202,7 @@ export default async function Home() {
                   {country.name} Passport Visa Requirements
                 </h3>
 
-                <p className="mt-2 text-sm text-zinc-500">
+                <p className="mt-2 text-sm text-zinc-600">
                   Explore visa rules for {country.name} passport holders
                 </p>
               </Link>
@@ -228,7 +228,7 @@ export default async function Home() {
                   {country.name} Visa Requirements
                 </h3>
 
-                <p className="mt-2 text-sm text-zinc-500">
+                <p className="mt-2 text-sm text-zinc-600">
                   Check entry rules and visa information
                 </p>
               </Link>
