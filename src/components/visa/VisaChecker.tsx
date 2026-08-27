@@ -2,6 +2,8 @@
 
 import { FormEvent, useEffect, useState } from "react";
 
+
+
 type Country = {
   code: string;
   name: string;
@@ -219,9 +221,10 @@ export default function VisaChecker() {
             </p>
 
             <h2 className="mt-2 text-3xl font-bold tracking-tight text-zinc-950">
-              {result.visaRequired
-                ? "Visa required"
-                : "Visa not required"}
+              {result.requirement
+                .replaceAll("_", " ")
+                .toLowerCase()
+                .replace(/^./, (c) => c.toUpperCase())}
             </h2>
 
             <p className="mt-2 text-sm text-zinc-500">

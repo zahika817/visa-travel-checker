@@ -145,3 +145,34 @@ export function isVisaRequired(requirement: VisaRequirement) {
     requirement === VisaRequirement.SPECIAL_PERMISSION
   );
 }
+
+
+export function getVisaRequirementLabel(
+  requirement: VisaRequirement
+) {
+  switch (requirement) {
+    case VisaRequirement.VISA_FREE:
+      return "Visa Free";
+
+    case VisaRequirement.VISA_REQUIRED:
+      return "Visa Required";
+
+    case VisaRequirement.EVISA_REQUIRED:
+      return "eVisa Required";
+
+    case VisaRequirement.VISA_ON_ARRIVAL:
+      return "Visa on Arrival";
+
+    case VisaRequirement.ETA_REQUIRED:
+      return "ETA Required";
+
+    case VisaRequirement.ENTRY_NOT_PERMITTED:
+      return "Entry Not Permitted";
+
+    case VisaRequirement.SPECIAL_PERMISSION:
+      return "Special Permission Required";
+
+    default:
+      return "Unknown";
+  }
+}
