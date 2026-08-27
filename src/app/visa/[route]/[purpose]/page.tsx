@@ -1,7 +1,11 @@
 import { notFound } from "next/navigation";
 import Script from "next/script";
 
-import { findVisaRule, isVisaRequired } from "@/lib/visa/rules";
+import {
+  findVisaRule,
+  isVisaRequired,
+  getVisaRequirementLabel,
+} from "@/lib/visa/rules";
 import { prisma } from "@/lib/db";
 
 type PageProps = {
@@ -233,9 +237,7 @@ export default async function VisaRoutePage({
         <div className="mt-8 rounded-3xl border bg-white p-8">
 
           <h2 className="text-2xl font-bold">
-            {isVisaRequired(rule.requirement)
-              ? "Visa Required"
-              : "Visa Free"}
+            {getVisaRequirementLabel(rule.requirement)}
           </h2>
 
           <div className="mt-6 grid gap-4 md:grid-cols-2">
