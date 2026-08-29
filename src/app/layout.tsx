@@ -14,11 +14,11 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Visa Requirement Checker - Check Visa Rules Worldwide",
+    default: "Visa Checker - Check Visa Requirements Before You Travel",
     template: "%s | Visa Requirement Checker",
   },
   description:
-    "Check visa requirements for tourism, study, work and travel routes worldwide using structured visa information.",
+    "Check visa requirements before traveling. Find visa-free, eVisa, visa on arrival and tourist visa information for destinations worldwide.",
   keywords: [
     "visa checker",
     "visa requirements",
@@ -35,9 +35,9 @@ export const metadata: Metadata = {
     },
   ],
   openGraph: {
-    title: "Visa Requirement Checker - Check Visa Rules Worldwide",
+    title: "Visa Checker - Check Visa Requirements Before You Travel",
     description:
-      "Find visa requirements for global travel routes with structured visa information.",
+      "Find accurate visa requirements for global travel routes including visa-free, eVisa and tourist visa information.",
     type: "website",
   },
 };
