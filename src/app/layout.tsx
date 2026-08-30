@@ -43,12 +43,37 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
+  const schema = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "name": "Visa Requirement Checker",
+        "description": "Global visa requirement information platform.",
+      },
+      {
+        "@type": "WebSite",
+        "name": "Visa Requirement Checker",
+        "description": "Check visa requirements before you travel.",
+        "url": process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
+      },
+    ],
+  };
+
   return (
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(schema),
+          }}
+        />
+        {children}
+      </body>
     </html>
   );
 }
