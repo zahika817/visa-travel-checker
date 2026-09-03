@@ -3,8 +3,8 @@ import Script from "next/script";
 
 import {
   findVisaRule,
-  isVisaRequired,
   getVisaRequirementLabel,
+  getVisaRequirementDescription,
 } from "@/lib/visa/rules";
 import { prisma } from "@/lib/db";
 
@@ -240,14 +240,16 @@ export default async function VisaRoutePage({
             {getVisaRequirementLabel(rule.requirement)}
           </h2>
 
+          <p className="mt-3 text-zinc-600">
+            {getVisaRequirementDescription(rule.requirement)}
+          </p>
+
           <div className="mt-6 grid gap-4 md:grid-cols-2">
 
             <div className="rounded-xl bg-zinc-50 p-4">
               <b>🛂 Visa Status</b>
               <p className="mt-2">
-                {isVisaRequired(rule.requirement)
-                  ? "Visa Required"
-                  : "Visa Free"}
+                {getVisaRequirementLabel(rule.requirement)}
               </p>
             </div>
 
@@ -308,9 +310,7 @@ export default async function VisaRoutePage({
                 Do {rule.passportCountry.name} citizens need a visa for {rule.destinationCountry.name}?
               </h3>
               <p className="mt-2 text-zinc-600">
-                {isVisaRequired(rule.requirement)
-                  ? `Yes, travelers from ${rule.passportCountry.name} require a visa for this travel purpose.`
-                  : `No visa is generally required for this travel purpose.`}
+                {getVisaRequirementDescription(rule.requirement)}
               </p>
             </div>
 
@@ -324,6 +324,35 @@ export default async function VisaRoutePage({
                 {rule.maxStayDays
                   ? `${rule.maxStayDays} days`
                   : "Not specified"}
+              </p>
+            </div>
+
+            <div>
+              <h3 className="font-semibold">
+                What type of visa is required?
+              </h3>
+              <p className="mt-2 text-zinc-600">
+                {rule.visaType?.name ?? "Visa type information is not specified."}
+              </p>
+            </div>
+
+            <div>
+              <h3 className="font-semibold">
+                Is multiple entry allowed?
+              </h3>
+              <p className="mt-2 text-zinc-600">
+                {rule.multipleEntry
+                  ? "Multiple entry is allowed."
+                  : "Multiple entry is not available according to the current rule."}
+              </p>
+            </div>
+
+            <div>
+              <h3 className="font-semibold">
+                Where can travelers verify official visa information?
+              </h3>
+              <p className="mt-2 text-zinc-600">
+                Travelers should verify requirements with the official immigration authority or consular source before travelling.
               </p>
             </div>
 
@@ -440,9 +469,7 @@ export default async function VisaRoutePage({
                   name: `Do ${rule.passportCountry.name} citizens need a visa for ${rule.destinationCountry.name}?`,
                   acceptedAnswer: {
                     "@type": "Answer",
-                    text: isVisaRequired(rule.requirement)
-                      ? "A visa is required for this travel purpose."
-                      : "A visa is not required for this travel purpose.",
+                    text: getVisaRequirementDescription(rule.requirement),
                   },
                 },
                 {
@@ -453,6 +480,34 @@ export default async function VisaRoutePage({
                     text: rule.maxStayDays
                       ? `The maximum stay is ${rule.maxStayDays} days.`
                       : "The maximum stay depends on the applicable visa rules.",
+                  },
+                },
+                {
+                  "@type": "Question",
+                  name: "What type of visa is required?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: rule.visaType?.name
+                      ? `The required visa type is ${rule.visaType.name}.`
+                      : "Visa type information is not specified.",
+                  },
+                },
+                {
+                  "@type": "Question",
+                  name: "Is multiple entry allowed?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: rule.multipleEntry
+                      ? "Multiple entry is allowed."
+                      : "Multiple entry is not available according to the current rule.",
+                  },
+                },
+                {
+                  "@type": "Question",
+                  name: "Where can travelers verify official visa information?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "Travelers should verify requirements with the official immigration authority or consular source before travelling.",
                   },
                 },
               ],

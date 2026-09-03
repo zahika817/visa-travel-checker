@@ -176,3 +176,34 @@ export function getVisaRequirementLabel(
       return "Unknown";
   }
 }
+
+
+export function getVisaRequirementDescription(
+  requirement: VisaRequirement
+) {
+  switch (requirement) {
+    case VisaRequirement.VISA_FREE:
+      return "No visa is required for this travel purpose.";
+
+    case VisaRequirement.VISA_REQUIRED:
+      return "A visa must be obtained before travelling.";
+
+    case VisaRequirement.EVISA_REQUIRED:
+      return "An electronic visa must be obtained before travelling.";
+
+    case VisaRequirement.VISA_ON_ARRIVAL:
+      return "A visa can be obtained after arrival at the destination.";
+
+    case VisaRequirement.ETA_REQUIRED:
+      return "Electronic Travel Authorization is required before travel.";
+
+    case VisaRequirement.ENTRY_NOT_PERMITTED:
+      return "Entry is not permitted for this travel purpose.";
+
+    case VisaRequirement.SPECIAL_PERMISSION:
+      return "Special permission is required before travel.";
+
+    default:
+      return "Visa requirement information is unavailable.";
+  }
+}
