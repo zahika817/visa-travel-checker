@@ -36,8 +36,8 @@ export async function generateMetadata({ params }: PageProps) {
   }
 
   return {
-    title: `${data.name} Passport Visa Requirements`,
-    description: `Check visa requirements and travel rules for ${data.name} passport holders worldwide.`,
+    title: `${data.name} Passport Visa Requirements 2026 - Visa Free Countries & Travel Rules`,
+    description: `Find visa requirements, visa free countries, eVisa information and travel rules for ${data.name} passport holders worldwide.`,
   };
 }
 
@@ -91,12 +91,24 @@ export default async function PassportPage({
     },
   });
 
+  const visaFreeCountries = await prisma.visaRule.findMany({
+    where: {
+      passportCountryId: passport.id,
+      active: true,
+      requirement: "VISA_FREE",
+    },
+    include: {
+      destinationCountry: true,
+    },
+    take: 20,
+  });
+
   return (
     <main className="min-h-screen bg-zinc-50 p-8 text-zinc-900">
       <div className="mx-auto max-w-4xl">
 
         <h1 className="text-4xl font-bold text-zinc-900">
-          {passport.name} Passport Visa Requirements
+          {passport.name} Passport Visa Requirements 2026
         </h1>
 
         <p className="mt-4 text-zinc-700">
@@ -136,6 +148,36 @@ export default async function PassportPage({
         </div>
 
 
+        <div className="mt-8 rounded-2xl border bg-white p-6">
+          <h2 className="text-2xl font-bold text-zinc-900">
+            Visa Free Countries for {passport.name} Passport Holders
+          </h2>
+
+          <p className="mt-3 text-zinc-600">
+            Countries where {passport.name} passport holders can travel
+            without a traditional visa requirement.
+          </p>
+
+          <div className="mt-5 grid gap-3 md:grid-cols-2">
+            {visaFreeCountries.map((rule) => (
+              <a
+                key={rule.id}
+                href={`/visa/${passport.slug}-to-${rule.destinationCountry.slug}/tourism`}
+                className="rounded-xl border bg-zinc-50 p-4 hover:bg-white"
+              >
+                <p className="font-semibold text-zinc-900">
+                  {rule.destinationCountry.name}
+                </p>
+
+                <p className="mt-1 text-sm text-blue-600">
+                  Check visa details →
+                </p>
+              </a>
+            ))}
+          </div>
+        </div>
+
+
 
         <script
           type="application/ld+json"
@@ -166,6 +208,14 @@ export default async function PassportPage({
                   "acceptedAnswer": {
                     "@type": "Answer",
                     "text": `You can check destination-specific visa requirements for ${passport.name} passport holders using the available visa route pages.`
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": `Which countries are visa free for ${passport.name} passport holders?`,
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": `${passport.name} passport holders can view available visa free destinations listed on this page.`
                   }
                 }
               ]
