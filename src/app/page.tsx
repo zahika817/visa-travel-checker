@@ -3,6 +3,13 @@ import Script from "next/script";
 import Link from "next/link";
 import { prisma } from "@/lib/db";
 
+
+export const metadata = {
+  title: "Visa Requirement Checker 2026 - Check Visa Rules Before Travel",
+  description:
+    "Check visa requirements worldwide based on your passport, destination and travel purpose. Find visa rules, eVisa information and travel requirements.",
+};
+
 export default async function Home() {
 
   const popularRoutes = await prisma.visaRule.findMany({
@@ -164,7 +171,7 @@ export default async function Home() {
 
         <section className="mt-16 w-full">
           <h2 className="text-2xl font-bold text-center">
-            Popular Visa Routes
+            Popular Visa Routes & Travel Requirements
           </h2>
 
           <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -188,7 +195,7 @@ export default async function Home() {
         </section>
         <section className="mt-16 w-full">
           <h2 className="text-2xl font-bold text-center">
-            Passport Guides
+            Passport Visa Guides
           </h2>
 
           <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -214,7 +221,7 @@ export default async function Home() {
 
         <section className="mt-16 w-full">
           <h2 className="text-2xl font-bold text-center">
-            Popular Destinations
+            Popular Destination Visa Requirements
           </h2>
 
           <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
