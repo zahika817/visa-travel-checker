@@ -73,11 +73,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     });
   });
 
+  uniquePages.set(`${siteUrl}/visa-checker`, {
+    url: `${siteUrl}/visa-checker`,
+    lastModified: new Date(),
+    changeFrequency: "weekly",
+    priority: 0.9,
+  });
+
   return [
     {
       url: siteUrl,
       lastModified: new Date(),
-      changeFrequency: "daily",
+      changeFrequency: "weekly",
       priority: 1,
     },
     ...Array.from(uniquePages.values()),
