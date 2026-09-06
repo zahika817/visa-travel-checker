@@ -92,6 +92,7 @@ const countries = [
   ["HT", "Haiti", "haiti"],
   ["HN", "Honduras", "honduras"],
   ["HU", "Hungary", "hungary"],
+  ["HK", "Hong Kong", "hong-kong"],
   ["IS", "Iceland", "iceland"],
   ["IN", "India", "india"],
   ["ID", "Indonesia", "indonesia"],
