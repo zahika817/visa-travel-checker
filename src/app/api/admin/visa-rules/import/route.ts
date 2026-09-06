@@ -22,6 +22,16 @@ export async function POST(request: Request) {
       );
     }
 
+    if (file.size > 5 * 1024 * 1024) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "CSV file size must be less than 5MB.",
+        },
+        { status: 400 },
+      );
+    }
+
     const text = await file.text();
 
     const parsed = Papa.parse<Record<string, string>>(text, {
@@ -29,9 +39,36 @@ export async function POST(request: Request) {
       skipEmptyLines: true,
     });
 
+    const requiredHeaders = [
+      "passport",
+      "destination",
+      "purpose",
+      "requirement",
+    ];
+
+    const headers = parsed.meta.fields ?? [];
+
+    const missingHeaders = requiredHeaders.filter(
+      (header) => !headers.includes(header),
+    );
+
+    if (missingHeaders.length > 0) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: `Invalid CSV format. Missing columns: ${missingHeaders.join(", ")}`,
+        },
+        { status: 400 },
+      );
+    }
+
     const created: string[] = [];
     const skipped: string[] = [];
-    const errors: string[] = [];
+    const errors: {
+      row: number;
+      message: string;
+      value?: string;
+    }[] = [];
     const records = [];
 
     const [countries, purposes, visaTypes] = await Promise.all([
@@ -84,12 +121,19 @@ export async function POST(request: Request) {
           !purposeCode ||
           !requirement
         ) {
-          errors.push(`Row ${index + 2}: Missing required fields`);
+          errors.push({
+            row: index + 2,
+            message: "Missing required fields",
+          });
           continue;
         }
 
         if (!validRequirements.includes(requirement as VisaRequirement)) {
-          errors.push(`Row ${index + 2}: Invalid requirement`);
+          errors.push({
+            row: index + 2,
+            message: "Invalid requirement",
+            value: requirement,
+          });
           continue;
         }
 
@@ -102,9 +146,11 @@ export async function POST(request: Request) {
           : null;
 
         if (!passport || !destination || !purpose) {
-          errors.push(
-            `Row ${index + 2}: Reference data missing`,
-          );
+          errors.push({
+            row: index + 2,
+            message: "Reference data missing",
+            value: `${passportCode}-${destinationCode}-${purposeCode}`,
+          });
           continue;
         }
 
@@ -125,7 +171,9 @@ export async function POST(request: Request) {
           visaTypeId: visaType?.id ?? null,
           requirement: requirement as VisaRequirement,
           maxStayDays: row.maxStayDays
-            ? Number(row.maxStayDays)
+            ? Number.isNaN(Number(row.maxStayDays))
+              ? null
+              : Number(row.maxStayDays)
             : null,
 
           multipleEntry:
@@ -157,14 +205,19 @@ export async function POST(request: Request) {
           `${passportCode}-${destinationCode}-${purposeCode}`,
         );
       } catch {
-        errors.push(`Row ${index + 2}: Import failed`);
+        errors.push({
+          row: index + 2,
+          message: "Import failed",
+        });
       }
     }
 
     if (records.length > 0) {
-      await prisma.visaRule.createMany({
-        data: records,
-      });
+      await prisma.$transaction([
+        prisma.visaRule.createMany({
+          data: records,
+        }),
+      ]);
     }
 
     return NextResponse.json({

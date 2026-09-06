@@ -2,10 +2,16 @@
 
 import { useState } from "react";
 
+type ImportError = {
+  row: number;
+  message: string;
+  value?: string;
+};
+
 type ImportReport = {
   created: number;
   skipped: number;
-  errors: string[];
+  errors: ImportError[];
 };
 
 export default function ImportVisaRulesPage() {
@@ -108,9 +114,28 @@ export default function ImportVisaRulesPage() {
             </div>
 
             {report.errors.length > 0 && (
-              <pre className="mt-4 overflow-auto rounded-xl bg-zinc-100 p-4 text-sm">
-                {JSON.stringify(report.errors, null, 2)}
-              </pre>
+              <div className="mt-4 space-y-3">
+                {report.errors.map((error, index) => (
+                  <div
+                    key={index}
+                    className="rounded-xl bg-zinc-100 p-4 text-sm"
+                  >
+                    <p className="font-semibold">
+                      Row {error.row}
+                    </p>
+
+                    <p className="mt-1">
+                      {error.message}
+                    </p>
+
+                    {error.value && (
+                      <p className="mt-1 text-zinc-600">
+                        Value: {error.value}
+                      </p>
+                    )}
+                  </div>
+                ))}
+              </div>
             )}
 
           </div>
