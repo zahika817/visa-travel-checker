@@ -1,21 +1,23 @@
 import fs from "fs";
 import path from "path";
+import { tourismDestinations } from "./config/tourism-destinations";
+
+const passport = "PK";
 
 const destinations = [
-  "GB",
-  "US",
-  "CA",
-  "AU",
-  "DE",
-  "FR",
-  "TR",
-  "AE",
-  "SA",
-  "JP",
+  ...new Set(
+    tourismDestinations.filter(
+      (destination) => destination !== passport,
+    ),
+  ),
 ];
 
+if (destinations.length === 0) {
+  throw new Error("No tourism destinations configured");
+}
+
 const rows = destinations.map((destination) => ({
-  passport: "PK",
+  passport,
   destination,
   purpose: "TOURISM",
   visaType: "TOURIST",
