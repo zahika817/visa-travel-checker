@@ -1,12 +1,28 @@
 import fs from "fs";
 import path from "path";
-import { tourismDestinations } from "./config/tourism-destinations";
+import { PK } from "./config/passports/PK";
+import { IN } from "./config/passports/IN";
 
-const passport = "PK";
+const passport = process.argv[2]?.toUpperCase();
+
+if (!passport) {
+  throw new Error("Passport country code required. Example: PK");
+}
+
+const passportDestinations =
+  passport === "PK"
+    ? PK
+    : passport === "IN"
+      ? IN
+      : null;
+
+if (!passportDestinations) {
+  throw new Error(`No tourism config found for passport: ${passport}`);
+}
 
 const destinations = [
   ...new Set(
-    tourismDestinations.filter(
+    passportDestinations.filter(
       (destination) => destination !== passport,
     ),
   ),
@@ -28,7 +44,7 @@ const rows = destinations.map((destination) => ({
   sourceName: "Official Government Immigration Source",
   sourceUrl: "",
   notes:
-    "Tourism visa requirement information for Pakistani passport holders.",
+    `Tourism visa requirement information for ${passport} passport holders.`,
 }));
 
 const header = Object.keys(rows[0]).join(",");
@@ -44,7 +60,7 @@ const csv = [
 
 const output = path.join(
   process.cwd(),
-  "scripts/data/batches/pakistan-tourism-batch.csv",
+  `scripts/data/batches/${passport.toLowerCase()}-tourism-batch.csv`,
 );
 
 fs.writeFileSync(output, csv);
