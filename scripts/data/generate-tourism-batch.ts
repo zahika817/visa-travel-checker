@@ -5,6 +5,7 @@ import { IN } from "./config/passports/IN";
 import { AE } from "./config/passports/AE";
 import { SA } from "./config/passports/SA";
 import { QA } from "./config/passports/QA";
+import { OM } from "./config/passports/OM";
 
 const passport = process.argv[2]?.toUpperCase();
 
@@ -23,7 +24,9 @@ const passportDestinations =
           ? SA
           : passport === "QA"
             ? QA
-            : null;
+            : passport === "OM"
+              ? OM
+              : null;
 
 if (!passportDestinations) {
   throw new Error(`No tourism config found for passport: ${passport}`);
